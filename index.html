@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VIYEDI Control</title>
+<style>
+:root{--red:#C62828;--red2:#9F1F22;--orange:#F57C00;--yellow:#FBC02D;--navy:#1E3A5F;--bg:#F5F6F7;--ink:#2B2F33;--muted:#70757A;--line:#E4E6E8;--green:#23884B}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.btn{border:0;border-radius:12px;padding:10px 13px;font-weight:900}.red{background:var(--red);color:#fff}.orange{background:var(--orange);color:#fff}.yellow{background:var(--yellow);color:#222}.green{background:var(--green);color:#fff}.outline{background:#fff;border:1px solid #d9dcdf}
+.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:16px}.muted{color:var(--muted);font-size:13px}
+.badge{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:900}.ok{background:#e8f7ee;color:#1d763f}.wait{background:#fff3c9;color:#775900}.off{background:#eef0f2;color:#5c6166}.warn{background:#fff0e2;color:#994900}.wa{background:#1FA855;color:#fff}.payment-success{margin-top:12px;padding:12px;border-radius:13px;background:#ECF8F0;border:1px solid #BDE4CB;color:#216D3B}.payment-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.grid{display:grid;gap:12px}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
+.metric{border-top:5px solid var(--red)}.metric.o{border-color:var(--orange)}.metric.y{border-color:var(--yellow)}.metric.n{border-color:var(--navy)}.metric span{font-size:12px;color:var(--muted)}.metric b{display:block;font-size:26px;margin-top:6px}
+label{display:block;font-size:12px;font-weight:800;margin-bottom:5px}input,select,textarea{width:100%;padding:11px 12px;border:1px solid #dce0e3;border-radius:12px;background:#fff}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:11px}.full{grid-column:1/-1}.notice{padding:11px 12px;border-radius:12px;background:#fff6da;border:1px solid #efd38b;color:#6f5512;font-size:12px}
+table{width:100%;border-collapse:collapse}th,td{padding:10px 8px;border-bottom:1px solid #eee;font-size:12px;text-align:left}th{font-size:10px;color:#777;text-transform:uppercase}
+.tabs,.periods{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}.tab,.period{border:1px solid #dadde0;background:#fff;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:900}.tab.active,.period.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.act{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;text-align:left}.act b{display:block}.act small{color:var(--muted)}
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}.side{background:#fff;border-right:1px solid var(--line);padding:14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;gap:10px;align-items:center;padding:6px 8px 16px;border-bottom:1px solid var(--line)}.logo{width:44px;height:44px;border-radius:14px;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:900}.brand b{font-size:18px}.brand small{display:block;color:var(--muted)}
+.group{margin-top:16px}.group>small{font-size:10px;font-weight:900;letter-spacing:.1em;color:#999;padding-left:9px}.nav{width:100%;border:0;background:transparent;border-radius:11px;padding:10px;text-align:left;font-weight:800;color:#555;margin-top:3px}.nav.active{background:var(--red);color:#fff}
+.main{min-width:0}.top{height:66px;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 18px;position:sticky;top:0;z-index:5}main{padding:20px}.page{display:none}.page.active{display:block}.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}.head h1{margin:0 0 4px}
+.modal{position:fixed;inset:0;background:rgba(20,24,28,.48);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}.modal.show{display:flex}.box{width:min(780px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:22px;padding:18px}.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.mh h2{margin:0}
+.toast{position:fixed;right:16px;bottom:16px;background:#222b32;color:#fff;padding:11px 14px;border-radius:12px;font-size:12px;font-weight:800;display:none;z-index:80}.toast.show{display:block}
+.notifs{position:fixed;right:14px;top:72px;width:min(380px,calc(100vw - 28px));background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 15px 45px rgba(0,0,0,.15);display:none;z-index:30;max-height:70vh;overflow:auto}.notifs.show{display:block}.ni{padding:12px 14px;border-bottom:1px solid #eee}.ni.unread{background:#fff9ef}.ni b{font-size:12px}.ni p{font-size:12px;color:#666;margin:4px 0}.ni small{color:#999}
+.login-screen{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;background:linear-gradient(135deg,#fff,#fff8ef)}.login-brand{padding:46px;background:linear-gradient(145deg,var(--red),var(--red2));color:#fff;display:flex;flex-direction:column;justify-content:space-between}.login-logo{width:68px;height:68px;border-radius:20px;background:var(--yellow);color:#2B2F33;display:grid;place-items:center;font-weight:1000;font-size:28px}.login-brand h1{font-size:46px;margin:18px 0 8px}.login-brand p{font-size:18px;line-height:1.5;max-width:560px;opacity:.9}.login-card-wrap{display:flex;align-items:center;justify-content:center;padding:30px}.login-card{width:min(460px,100%);background:#fff;border:1px solid #E5E7E9;border-radius:24px;padding:28px;box-shadow:0 16px 45px rgba(30,35,40,.10)}.login-card h2{margin:5px 0 6px;font-size:30px}.login-kicker{font-size:11px;font-weight:1000;letter-spacing:.12em;color:var(--red)}.login-field{margin-top:16px}.quick-login-box{margin-top:18px;padding:14px;border-radius:16px;background:#FFF8EA;border:1px solid #F0D9B3}.quick-login-result{margin-top:12px;padding:14px;border-radius:14px;background:var(--yellow);text-align:center}.quick-login-result b{display:block;font-size:30px}.login-error{display:none;margin-top:12px;padding:10px 12px;border-radius:12px;background:#FFF0F0;border:1px solid #F0CACA;color:#982A2A;font-size:12px}.login-error.show{display:block}
+.branch-card{cursor:pointer;transition:.15s}.branch-card:hover{transform:translateY(-2px);border-color:#f1b163}.photo-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.photo-preview img{width:90px;height:70px;object-fit:cover;border-radius:10px;border:1px solid #ddd}
+.activity-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:end;margin-top:8px}.week-day{border:1px solid #ddd;border-radius:13px;padding:11px;margin-bottom:8px;background:#fafafa}.week-day h4{margin:0 0 8px}
+.rate-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}.rate-pill{background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px}.rate-pill b{display:block;color:var(--red);font-size:16px}.rate-pill span{font-size:10px;color:var(--muted)}
+.payroll-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}.payroll-table{min-width:1250px}.payroll-table th{background:var(--navy);color:#fff;white-space:nowrap}.payroll-table td{white-space:nowrap}.payroll-table .total-cell{font-weight:900;color:var(--red);background:#fff8e8}.payroll-table .click-cell{border:0;background:#fff0e2;color:#8a4300;border-radius:8px;padding:5px 7px;font-weight:900}
+.discount-list{display:grid;gap:8px}.discount-item{padding:10px;border:1px solid var(--line);border-radius:12px;background:#fafafa}.discount-item b{display:block}.section-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:15px 0 9px}.section-title h3{margin:0}
+
+@media(max-width:900px){.g4{grid-template-columns:1fr 1fr}.g3,.g2,.form{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr}.full{grid-column:auto}.shell{grid-template-columns:1fr}.side{position:fixed;left:0;right:0;bottom:0;top:auto;height:auto;z-index:20;border-top:1px solid #ddd;padding:6px}.brand,.group>small{display:none}.side nav{display:grid;grid-template-columns:repeat(5,1fr)}.group{display:contents}.nav{font-size:9px;text-align:center;padding:7px 2px}.nav:nth-of-type(n+6){display:none}main{padding:14px 12px 80px}.activity-row{grid-template-columns:1fr}}
+@media(max-width:850px){.login-screen{grid-template-columns:1fr}.login-brand{display:none}.login-card-wrap{padding:18px;min-height:100vh}}
+
+.week-editor{margin-top:14px}.week-header-box{background:linear-gradient(135deg,#fff8e8,#fff);border:1px solid #efd9b0;border-radius:16px;padding:14px;margin-bottom:12px}
+.day-tabs{display:flex;gap:7px;overflow:auto;padding-bottom:5px;margin-bottom:12px}.day-tab{min-width:90px;border:1px solid #d9dcdf;background:#fff;border-radius:13px;padding:9px 10px;font-weight:900;font-size:11px}.day-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}.day-tab.done{box-shadow:inset 0 -4px 0 var(--green)}.day-tab.offday{box-shadow:inset 0 -4px 0 #999}
+.day-editor{border:1px solid var(--line);border-radius:16px;padding:15px;background:#fff}.worked-toggle{display:flex;gap:8px;margin:10px 0 14px}.worked-btn{border:1px solid #d9dcdf;background:#fff;border-radius:999px;padding:9px 13px;font-weight:900}.worked-btn.active.yes{background:#e8f7ee;color:#1d763f;border-color:#b7dfc6}.worked-btn.active.no{background:#eef0f2;color:#565b60;border-color:#cfd3d6}
+.week-activity-row{display:grid;grid-template-columns:1.3fr .8fr auto;gap:8px;align-items:end;margin-top:8px;padding:10px;border:1px solid #eee;border-radius:13px;background:#fafafa}.week-activity-row .remove-week-act{align-self:center}
+.week-savebar{position:sticky;bottom:0;background:rgba(255,255,255,.96);border-top:1px solid #e5e5e5;margin:16px -18px -18px;padding:12px 18px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.week-summary-mini{font-size:12px;color:var(--muted)}.week-summary-mini b{color:var(--ink)}
+@media(max-width:700px){.week-activity-row{grid-template-columns:1fr}.week-savebar{flex-direction:column;align-items:stretch}}
+
+
+.week-matrix-wrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:#fff}
+.week-matrix{min-width:1180px;border-collapse:separate;border-spacing:0}
+.week-matrix th{background:var(--navy);color:#fff;position:sticky;top:0;z-index:1;text-align:center}
+.week-matrix th:first-child,.week-matrix th:nth-child(2){text-align:left}
+.week-matrix td{vertical-align:middle;text-align:center;background:#fff}
+.week-matrix .worker-name{text-align:left;font-weight:900;min-width:160px}
+.week-matrix .worker-no{width:48px;font-weight:900;color:var(--muted)}
+.day-head-btn{border:0;background:transparent;color:#fff;font-weight:900;width:100%;padding:3px 4px}
+.day-head-btn small{display:block;color:#dfe7f1;font-weight:700;margin-top:2px}
+.week-cell-btn{width:100%;min-height:66px;border:1px solid transparent;background:#fafafa;border-radius:10px;padding:7px 6px;font-size:10px;font-weight:800;line-height:1.35}
+.week-cell-btn:hover{border-color:#f0b36b;background:#fff8ee}
+.week-cell-btn.no-work{background:#f1f2f3;color:#777;font-size:18px}
+.week-cell-btn.empty{color:#aaa;font-size:16px}
+.week-cell-btn.has-data{background:#fffaf0}
+.week-cell-line{display:block;white-space:nowrap}.week-cell-line strong{color:var(--red)}
+.week-pay-total{font-weight:1000;color:var(--red);background:#fff8e8!important;min-width:100px}
+.week-top-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.week-top-summary .card{padding:12px}.week-top-summary b{display:block;font-size:20px;margin-top:4px}
+.trip-activity-card{border:1px solid var(--line);border-radius:15px;padding:13px;background:#fafafa;margin-top:10px}
+.trip-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.trip-head h4{margin:0}
+.trip-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.trip-box{background:#fff;border:1px solid #ddd;border-radius:11px;padding:8px}.trip-box label{font-size:10px}
+.trip-total{margin-top:8px;font-weight:900;color:var(--navy)}
+.day-summary-worker{border:1px solid var(--line);border-radius:13px;padding:11px;margin-bottom:8px;background:#fff}
+.day-summary-worker h4{margin:0 0 6px}
+.eq{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;padding:4px 0}
+.week-payment-note{padding:12px 14px;border-radius:13px;background:#eef4fb;border:1px solid #c9d9ec;color:#234d78;font-size:12px}
+@media(max-width:700px){.week-top-summary{grid-template-columns:1fr 1fr}.trip-list{grid-template-columns:1fr}.week-matrix{min-width:980px}}
+
+
+/* ===== MODO OSCURO VIYEDI ===== */
+html{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark;--bg:#11161B;--ink:#F1F4F6;--muted:#A8B0B7;--line:#30373E;--navy:#244D78}
+html[data-theme="dark"] body{background:#11161B;color:var(--ink)}
+html[data-theme="dark"] .side,html[data-theme="dark"] .top,html[data-theme="dark"] .card,html[data-theme="dark"] .act,html[data-theme="dark"] .box,html[data-theme="dark"] .notifs,html[data-theme="dark"] .login-card,html[data-theme="dark"] .rate-pill,html[data-theme="dark"] .day-editor,html[data-theme="dark"] .week-header-box,html[data-theme="dark"] .day-summary-worker,html[data-theme="dark"] .trip-box{background:#1A2026;color:var(--ink);border-color:var(--line)}
+html[data-theme="dark"] .login-screen{background:linear-gradient(135deg,#101419,#171D23)}
+html[data-theme="dark"] .login-card{box-shadow:0 18px 50px rgba(0,0,0,.38)}
+html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea,html[data-theme="dark"] .outline,html[data-theme="dark"] .tab,html[data-theme="dark"] .period,html[data-theme="dark"] .nav,html[data-theme="dark"] .worked-btn,html[data-theme="dark"] .day-tab,html[data-theme="dark"] .week-cell-btn{background:#232A31;color:var(--ink);border-color:#3A424A}
+html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:#7E8992}
+html[data-theme="dark"] .nav{color:#C2C9CF}html[data-theme="dark"] .nav.active{background:var(--red);color:#fff}
+html[data-theme="dark"] .outline:hover,html[data-theme="dark"] .tab:hover,html[data-theme="dark"] .period:hover{background:#2A323A}
+html[data-theme="dark"] .notice{background:#332B16;border-color:#5B4A1C;color:#F0D88D}
+html[data-theme="dark"] .quick-login-box{background:#2C2518;border-color:#554622}
+html[data-theme="dark"] .quick-login-result{background:#D8A900;color:#111}
+html[data-theme="dark"] .payment-success{background:#173124;border-color:#285A3D;color:#8DDBA9}
+html[data-theme="dark"] .login-error{background:#351D1F;border-color:#673235;color:#FFAAAA}
+html[data-theme="dark"] .week-day,html[data-theme="dark"] .week-activity-row,html[data-theme="dark"] .discount-item,html[data-theme="dark"] .trip-activity-card{background:#171D23;border-color:var(--line)}
+html[data-theme="dark"] .week-matrix-wrap,html[data-theme="dark"] .payroll-wrap{background:#171D23;border-color:var(--line)}
+html[data-theme="dark"] .week-matrix td{background:#1A2026;border-color:#30373E}
+html[data-theme="dark"] .week-cell-btn{background:#20272E}html[data-theme="dark"] .week-cell-btn.has-data{background:#2A2419}html[data-theme="dark"] .week-cell-btn.no-work{background:#252B31;color:#9AA3AA}
+html[data-theme="dark"] .payroll-table td{border-color:#30373E}
+html[data-theme="dark"] .payroll-table .total-cell,html[data-theme="dark"] .week-pay-total{background:#2A2218!important;color:#FFD36A}
+html[data-theme="dark"] .payroll-table .click-cell{background:#3B2A17;color:#FFC06C}
+html[data-theme="dark"] .week-payment-note{background:#17283A;border-color:#294863;color:#AFCDE9}
+html[data-theme="dark"] .ni{border-color:#30373E}html[data-theme="dark"] .ni.unread{background:#2A2419}html[data-theme="dark"] .ni p{color:#BBC3C9}html[data-theme="dark"] .ni small{color:#8D979F}
+html[data-theme="dark"] th,html[data-theme="dark"] td{border-color:#30373E}html[data-theme="dark"] th{color:#A9B1B8}
+html[data-theme="dark"] .theme-toggle{background:#232A31;color:#F5D36A;border:1px solid #3A424A}
+.theme-toggle{white-space:nowrap}
+body,.side,.top,.card,.act,.box,.notifs,.login-card,input,select,textarea{transition:background-color .18s ease,color .18s ease,border-color .18s ease}
+
+</style>
+</head><body>
+
+<section id="loginScreen" class="login-screen">
+<div class="login-brand"><div><div class="login-logo">V</div><div style="margin-top:18px;color:#FFD45A;font-weight:900">MATADERO AVÍCOLA VIYEDI</div><h1>VIYEDI Control</h1><p>Gestión de despachos, producción, clientes, cobranza, sucursales y trabajadores.</p></div><div><b>Acceso protegido por usuario y permisos</b><div style="opacity:.8;font-size:13px;margin-top:6px">Victor es el usuario raíz del prototipo.</div></div></div>
+<div class="login-card-wrap"><div class="login-card"><div style="display:flex;justify-content:flex-end;margin-bottom:8px"><button id="themeToggleLogin" class="btn outline theme-toggle" type="button">🌙 Modo oscuro</button></div><div class="login-kicker">VIYEDI CONTROL</div><h2>Bienvenido</h2><div class="muted">Ingresá con tu usuario.</div><div class="login-field"><label>Usuario</label><input id="loginUser" value="victor28"></div><div class="login-field"><label>Contraseña</label><input id="loginPass" type="password" value="demo123"></div><div style="margin-top:18px"><button id="loginButton" class="btn red" style="width:100%">Ingresar</button></div><div id="loginError" class="login-error">Usuario o contraseña incorrectos.</div>
+<div class="quick-login-box"><b>Calculadora rápida VIYEDI</b><div class="muted">Sin iniciar sesión.</div><div class="form" style="margin-top:10px"><div><label>Precio</label><select id="quickPrice"><option value="19.5">Precio por caja — Bs 19,50</option><option value="21">Venta normal — Bs 21,00</option></select></div><div><label>Peso kg</label><input id="quickWeight" value="2,35"></div></div><div class="quick-login-result"><span>Total</span><b id="quickResult">Bs 45,83</b></div></div><div class="muted" style="margin-top:12px">Demo: victor28 / demo123</div></div></div>
+</section>
+
+<div id="appShell" class="shell hidden">
+<aside class="side"><div class="brand"><div class="logo">V</div><div><b>VIYEDI</b><small>CONTROL</small></div></div><nav>
+<div class="group"><small>GENERAL</small><button class="nav active" data-page="home">▣ Inicio</button><button class="nav" data-page="users">👤 Usuarios</button></div>
+<div class="group"><small>OPERACIÓN</small><button class="nav" data-page="dispatch">🚚 Despachos</button><button class="nav" data-page="production">🐔 Producción</button></div>
+<div class="group"><small>COMERCIAL</small><button class="nav" data-page="commercial">💳 Clientes y Cobranza</button></div>
+<div class="group"><small>SUCURSALES</small><button class="nav" data-page="branches">🏪 Sucursales</button></div>
+<div class="group"><small>PERSONAL</small><button class="nav" data-page="workers">👷 Trabajadores</button></div>
+<div class="group"><small>CONTROL</small><button class="nav" data-page="reports">📊 Reportes</button></div>
+</nav></aside>
+
+<div class="main"><header class="top"><div><b id="title">Inicio</b><div class="muted">Matadero Avícola VIYEDI</div></div><div style="display:flex;gap:8px"><button id="themeToggle" class="btn outline theme-toggle" type="button" title="Cambiar modo">🌙</button><button id="bell" class="btn outline">🔔</button><button id="logoutButton" class="btn outline">Salir</button></div></header>
+<div id="notifBox" class="notifs"><div class="ni"><b>Notificaciones</b></div><div id="notifList"></div></div>
+<main>
+
+<section id="page-home" class="page active">
+<div class="head"><div><h1>Inicio</h1><div class="muted">Resumen general del sistema.</div></div></div>
+<div class="grid g4"><div class="card metric"><span>Despachos entregados</span><b id="mD">2</b></div><div class="card metric o"><span>Cajas</span><b id="mB">43</b></div><div class="card metric y"><span>Cobrado</span><b id="mC">Bs 1.600,00</b></div><div class="card metric n"><span>Adelantos</span><b id="mA">Bs 0,00</b></div></div>
+<div style="height:14px"></div><div class="card"><h3>Acciones rápidas</h3><div class="actions"><button class="act" data-open="userModal"><b>👤 Crear usuario</b><small>accesos y sucursal</small></button><button class="act" data-open="dispatchModal"><b>🚚 Nuevo despacho</b><small>cajas y kilos</small></button><button class="act" data-open="liveModal"><b>🐔 Pollo vivo</b><small>boleta completa</small></button><button class="act" data-open="paymentModal"><b>💳 Registrar cobro</b><small>fecha y hora</small></button></div></div>
+</section>
+
+<section id="page-users" class="page"><div class="head"><div><h1>Usuarios</h1><div class="muted">Solo usuarios de la aplicación. Los clientes no son usuarios.</div></div><button class="btn red" data-open="userModal">+ Crear usuario</button></div><div class="card"><table><thead><tr><th>Nombre</th><th>Usuario</th><th>Sucursal</th><th>Acceso</th><th>Estado</th></tr></thead><tbody id="userBody"></tbody></table></div></section>
+
+<section id="page-dispatch" class="page"><div class="head"><div><h1>Despachos</h1><div class="muted">Movimientos entregados por sucursal o cliente.</div></div><button class="btn red" data-open="dispatchModal">+ Nuevo despacho</button></div><div class="periods"><button class="period active">Hoy</button><button class="period">Semana</button><button class="period">Mes</button><button class="period">Historial</button></div><div class="card"><table><thead><tr><th>Fecha/Hora</th><th>Destino</th><th>Cajas</th><th>Kg</th><th>Precio</th><th>Estado</th></tr></thead><tbody id="dispatchBody"></tbody></table></div></section>
+
+<section id="page-production" class="page"><div class="head"><div><h1>Producción y Pollo Vivo</h1><div class="muted">Elegí fecha para revisar el trabajo registrado.</div></div><button class="btn orange" data-open="liveModal">+ Registrar pollo vivo</button></div>
+<div class="form" style="margin-bottom:14px"><div><label>Fecha a consultar</label><input id="productionDate" type="date"></div><div style="align-self:end"><button id="openWeekly" class="btn yellow">Liquidación semanal</button></div></div>
+<div class="grid g4"><div class="card metric y"><span>Pollos</span><b id="pBirds">—</b></div><div class="card metric o"><span>Granja</span><b id="pFarm" style="font-size:18px">—</b></div><div class="card metric"><span>Precio pollo vivo</span><b id="pPrice">—</b></div><div class="card metric n"><span>Peso neto</span><b id="pNet">—</b></div></div>
+<div style="height:14px"></div><div class="card"><div class="head"><div><h3 style="margin:0">Producción diaria</h3><div class="muted">Trabajadores y actividades de la fecha seleccionada.</div></div><button class="btn outline" data-open="activityModal">+ Registrar actividad</button></div><table><thead><tr><th>Trabajador</th><th>Actividad</th><th>Cantidad</th><th>Tarifa</th><th>Subtotal</th></tr></thead><tbody id="dailyProdBody"></tbody></table></div>
+</section>
+
+<section id="page-commercial" class="page"><div class="head"><div><h1>Clientes y Cobranza</h1><div class="muted">Clientes comerciales, solicitudes, cobros y arqueo.</div></div><button class="btn red" data-open="requestModal">+ Solicitar cliente</button></div><div class="grid g2"><div class="card"><h3>Clientes</h3><table><thead><tr><th>Cliente</th><th>Mercado</th><th>Teléfono</th><th>Saldo</th></tr></thead><tbody id="clientBody"></tbody></table></div><div class="card"><h3>Solicitudes</h3><div id="reqList"></div></div></div><div style="height:14px"></div><div class="grid g2"><div class="card"><h3>Pagos</h3><button class="btn yellow" data-open="paymentModal">Registrar cobro</button><table><thead><tr><th>Cliente</th><th>Monto</th><th>Fecha</th><th>Hora</th><th>Registró</th></tr></thead><tbody id="payBody"></tbody></table></div><div class="card"><h3>Arqueo</h3><button class="btn yellow" data-open="moneyModal">Registrar entrega / depósito</button><table><thead><tr><th>Responsable</th><th>Monto</th><th>Fecha/Hora</th><th>Estado</th></tr></thead><tbody id="moneyBody"></tbody></table></div></div></section>
+
+<section id="page-branches" class="page"><div class="head"><div><h1>Sucursales</h1><div class="muted">Tocá una sucursal para abrir su panel.</div></div><button class="btn red" data-open="branchModal">+ Nueva sucursal</button></div><div id="branchGrid" class="grid g3"></div></section>
+
+<section id="page-workers" class="page"><div class="head"><div><h1>Trabajadores</h1><div class="muted">Personal del matadero y sucursales.</div></div><button class="btn red" data-open="workerModal">+ Nuevo trabajador</button></div><div class="tabs"><button class="tab active" data-wf="Todos">Todos</button><button class="tab" data-wf="Ventas">Ventas</button><button class="tab" data-wf="Pelador">Pelador</button><button class="tab" data-wf="Ayudante">Ayudante</button><button class="tab" data-wf="Matador">Matador</button><button class="tab" data-wf="Limpieza">Limpieza</button><button class="tab" data-wf="Champador">Champador</button><button class="tab" data-wf="Pintador">Pintador</button></div><div class="card"><table><thead><tr><th>Nombre</th><th>Sección</th><th>Sucursal</th><th>Tarifa</th></tr></thead><tbody id="workerBody"></tbody></table></div><div style="height:14px"></div><div class="card"><h3>Adelantos</h3><button class="btn yellow" data-open="advanceModal">+ Registrar adelanto</button><table><thead><tr><th>Trabajador</th><th>Monto</th><th>Fecha/Hora</th><th>Motivo</th><th>Estado</th></tr></thead><tbody id="advanceBody"></tbody></table></div><div style="height:14px"></div><div class="card"><h3>Descuentos varios</h3><div class="muted">Separados de adelantos y del descuento diario de limpieza.</div><div style="height:8px"></div><button class="btn orange" data-open="discountModal">+ Registrar descuento vario</button><table><thead><tr><th>Trabajador</th><th>Monto</th><th>Fecha</th><th>Motivo</th></tr></thead><tbody id="discountBody"></tbody></table></div></section>
+
+<section id="page-reports" class="page"><div class="head"><div><h1>Reportes</h1><div class="muted">Los reportes financieros completos quedan pendientes hasta definir todas las tarifas.</div></div></div><div class="notice">La exportación Excel de liquidación semanal está simulada en esta versión: genera un CSV que podés abrir con Excel.</div></section>
+
+</main></div></div>
+
+<div id="dispatchModal" class="modal"><div class="box"><div class="mh"><h2>Nuevo despacho</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Destino</label><select id="dDest"></select></div><div><label>Cajas</label><input id="dBoxes" type="number" value="25"></div><div><label>Kilos entregados</label><input id="dKg" value="548,30"></div><div><label>Precio esperado de venta (Bs/kg)</label><input id="dPrice" value="19,50"></div><div><label>Fecha</label><input id="dDate" type="date"></div><div><label>Hora</label><input id="dTime" type="time"></div></div><div style="height:12px"></div><button id="saveDispatch" class="btn red">Registrar como entregado</button></div></div>
+
+<div id="liveModal" class="modal"><div class="box"><div class="mh"><h2>Registrar pollo vivo</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Fecha</label><input id="lDate" type="date"></div><div><label>Granja</label><input id="lFarm"></div><div><label>Nombre del chofer</label><input id="lDriver"></div><div><label>Cantidad de pollos</label><input id="lBirds" type="number"></div><div><label>Peso bruto kg</label><input id="lGross"></div><div><label>Tara kg</label><input id="lTare"></div><div><label>Peso neto kg</label><input id="lNet" disabled></div><div><label>Precio</label><input id="lPrice"></div><div class="full"><label>Fotos / boletas</label><input id="lPhotos" type="file" accept="image/*" multiple><div id="photoPreview" class="photo-preview"></div></div></div><div style="height:12px"></div><button id="saveLive" class="btn orange">Guardar pollo vivo</button></div></div>
+
+<div id="activityModal" class="modal"><div class="box"><div class="mh"><h2>Registrar actividad de producción</h2><button class="btn outline close">Cerrar</button></div>
+<div class="form"><div><label>Fecha</label><input id="actDate" type="date"></div><div><label>Trabajador</label><select id="actWorker"></select></div><div><label>Actividad</label><select id="actType"><option>Pelador</option><option>Matador</option><option>Champador</option><option>Ayudó a champar</option><option>Pintador</option><option>Ayudante</option><option>Limpieza general</option><option>Lava cajas</option></select></div><div id="actQtyWrap"><label id="actQtyLabel">Cantidad de pollos</label><input id="actQty" type="number"></div></div>
+<div id="activityRateHint" class="notice" style="margin-top:12px"></div><div style="height:12px"></div><button id="saveActivity" class="btn red">Guardar actividad</button> <button id="saveActivityAnother" class="btn outline">Guardar y agregar otra</button></div></div>
+
+<div id="weeklyModal" class="modal"><div class="box" style="width:min(1320px,100%)">
+<div class="mh"><h2>Planilla semanal de pagos</h2><button class="btn outline close">Cerrar</button></div>
+
+<div class="form">
+  <div><label>Semana a consultar</label><input id="weekDate" type="date"></div>
+  <div><label>Día de pago</label><input id="weekPayDate" disabled></div>
+</div>
+<div id="weekRangeText" class="week-payment-note" style="margin-top:12px"></div>
+
+<div class="week-top-summary">
+  <div class="card metric"><span>Trabajadores</span><b id="weekWorkersCount">0</b></div>
+  <div class="card metric o"><span>Días con registros</span><b id="weekDaysWithData">0</b></div>
+  <div class="card metric y"><span>Descuentos limpieza</span><b id="weekCleaningDiscount">Bs 0,00</b></div>
+  <div class="card metric n"><span>Total calculable</span><b id="weekGrandTotal">Bs 0,00</b></div>
+</div>
+
+<div class="section-title"><div><h3>Historial de trabajo semanal</h3><div class="muted">Tocá una casilla para ver los viajes del trabajador. Tocá el nombre del día para ver el resumen completo.</div></div></div>
+<div class="week-matrix-wrap">
+<table class="week-matrix">
+<thead><tr id="weekMatrixHead"></tr></thead>
+<tbody id="weekMatrixBody"></tbody>
+</table>
+</div>
+
+<div style="height:16px"></div>
+<div class="section-title"><h3>Resumen de pago</h3><span class="muted">Cálculo por actividad, adelantos y descuentos</span></div>
+<div class="payroll-wrap"><table class="payroll-table"><thead><tr>
+<th>Trabajador</th><th>Pelado cant.</th><th>Pelado Bs</th><th>Matanza cant.</th><th>Matanza Bs</th><th>Champado cant.</th><th>Champado Bs</th><th>Limpieza gral. días</th><th>Limpieza Bs</th><th>Lava cajas días</th><th>Lava cajas Bs</th><th>Días trabajados</th><th>Desc. limpieza</th><th>Adelantos</th><th>Descuento vario</th><th>Total</th>
+</tr></thead><tbody id="weekPayrollBody"></tbody></table></div>
+
+<div class="week-savebar">
+  <div class="week-summary-mini"><b id="weekPendingSummary">Sin cambios pendientes</b><br>Los cambios de las casillas se guardan juntos al final.</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn yellow" data-open="advanceModal">+ Adelanto</button>
+    <button class="btn orange" data-open="discountModal">+ Descuento vario</button>
+    <button id="saveWholeWeek" class="btn green">Guardar semana completa</button>
+    <button id="downloadWeek" class="btn outline">Descargar CSV</button>
+  </div>
+</div>
+</div></div>
+
+<div id="weekCellModal" class="modal"><div class="box" style="width:min(820px,100%)">
+<div class="mh"><div><h2 id="weekCellTitle">Detalle del día</h2><div id="weekCellSubtitle" class="muted"></div></div><button class="btn outline close">Cerrar</button></div>
+<div class="worked-toggle"><button id="cellWorkedYes" class="worked-btn yes">✓ Trabajó</button><button id="cellWorkedNo" class="worked-btn no">— No trabajó</button></div>
+<div id="cellActivitiesArea">
+  <div class="notice">Cada número puede ser un viaje/tanda. El total del día se calcula automáticamente.</div>
+  <div id="cellActivityCards"></div>
+  <div style="margin-top:10px"><button id="addCellActivity" class="btn outline">+ Otra actividad</button></div>
+</div>
+<div style="height:14px"></div><div class="calc"><div class="line"><span>Total de actividades del día</span><b id="cellDayTotal">—</b></div><div class="line total"><span>Pago calculable del día</span><span id="cellDayPay">Bs 0,00</span></div></div>
+<div style="height:12px"></div><button id="applyCellDraft" class="btn green">Aplicar a la semana</button>
+</div></div>
+
+<div id="daySummaryModal" class="modal"><div class="box" style="width:min(820px,100%)">
+<div class="mh"><div><h2 id="daySummaryTitle">Resumen del día</h2><div id="daySummarySubtitle" class="muted"></div></div><button class="btn outline close">Cerrar</button></div>
+<div id="daySummaryTotals" class="week-top-summary"></div>
+<div id="daySummaryWorkers"></div>
+</div></div>
+
+<div id="branchDetailModal" class="modal"><div class="box"><div class="mh"><h2 id="branchDetailTitle">Sucursal</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Fecha</label><input id="branchDate" type="date"></div></div><div style="height:12px"></div><div class="grid g4"><div class="card metric"><span>Cajas</span><b id="bdBoxes">0</b></div><div class="card metric o"><span>Kilos</span><b id="bdKg">0</b></div><div class="card metric y"><span>Precio esperado</span><b id="bdPrice">—</b></div><div class="card metric n"><span>Trabajadores</span><b id="bdWorkers">0</b></div></div><div style="height:12px"></div><div class="card"><h3>Despachos de la fecha</h3><table><thead><tr><th>Hora</th><th>Cajas</th><th>Kg</th><th>Precio</th></tr></thead><tbody id="bdTable"></tbody></table></div></div></div>
+
+<div id="workerModal" class="modal"><div class="box"><div class="mh"><h2>Crear trabajador</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Nombre</label><input id="wName"></div><div><label>Sección principal</label><select id="wSection"><option>Ventas</option><option>Pelador</option><option>Ayudante</option><option>Matador</option><option>Limpieza</option><option>Champador</option><option>Pintador</option></select></div><div><label>Sucursal</label><select id="wBranch"></select></div></div><div style="height:12px"></div><button id="saveWorker" class="btn red">Guardar trabajador</button></div></div>
+
+<div id="advanceModal" class="modal"><div class="box"><div class="mh"><h2>Registrar adelanto</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Trabajador</label><select id="aWorker"></select></div><div><label>Monto</label><input id="aAmount"></div><div><label>Fecha</label><input id="aDate" type="date"></div><div><label>Motivo</label><input id="aReason"></div></div><div style="height:12px"></div><button id="saveAdvance" class="btn yellow">Registrar adelanto</button></div></div>
+
+<div id="discountModal" class="modal"><div class="box"><div class="mh"><h2>Registrar descuento vario</h2><button class="btn outline close">Cerrar</button></div><div class="notice">Separado del adelanto y del descuento diario de Bs 5. El motivo es obligatorio.</div><div class="form" style="margin-top:12px"><div><label>Trabajador</label><select id="discountWorker"></select></div><div><label>Monto (Bs)</label><input id="discountAmount"></div><div><label>Fecha</label><input id="discountDate" type="date"></div><div class="full"><label>Motivo del descuento</label><textarea id="discountReason" rows="3" placeholder="Cuenta atrasada, saldo anterior, atraso, falta de uniforme, material retirado, mala conducta..."></textarea></div></div><div style="height:12px"></div><button id="saveDiscount" class="btn orange">Guardar descuento</button></div></div>
+
+<div id="discountDetailModal" class="modal"><div class="box"><div class="mh"><h2>Detalle de descuentos varios</h2><button class="btn outline close">Cerrar</button></div><div id="discountDetailList" class="discount-list"></div></div></div>
+
+<div id="userModal" class="modal"><div class="box"><div class="mh"><h2>Crear usuario de la app</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Nombre</label><input id="uName"></div><div><label>Usuario</label><input id="uUser"></div><div><label>Contraseña temporal</label><input id="uPass"></div><div><label>Sucursal</label><select id="uBranch"></select></div><div class="full"><label>Accesos</label><div class="grid g3"><label><input class="perm" type="checkbox" value="Despachos"> Despachos</label><label><input class="perm" type="checkbox" value="Producción"> Producción</label><label><input class="perm" type="checkbox" value="Cobranza"> Cobranza</label><label><input class="perm" type="checkbox" value="Sucursales"> Sucursales</label><label><input class="perm" type="checkbox" value="Trabajadores"> Trabajadores</label><label><input class="perm" type="checkbox" value="Aprobar clientes"> Aprobar clientes</label></div></div></div><div style="height:12px"></div><button id="saveUser" class="btn red">Crear usuario</button></div></div>
+
+<div id="requestModal" class="modal"><div class="box"><div class="mh"><h2>Solicitar cliente</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Nombre</label><input id="rName"></div><div><label>Mercado</label><select id="rMarket"></select></div><div><label>Teléfono / WhatsApp</label><input id="rPhone" placeholder="+5917XXXXXXX"></div></div><div style="height:12px"></div><button id="saveRequest" class="btn red">Enviar solicitud</button></div></div>
+<div id="paymentModal" class="modal"><div class="box"><div class="mh"><h2>Registrar cobro</h2><button class="btn outline close">Cerrar</button></div>
+<div class="form"><div><label>Cliente</label><select id="pClient"></select></div><div><label>Teléfono WhatsApp</label><input id="pPhone" disabled></div><div><label>Saldo / cuenta antes del pago</label><input id="pDebt" disabled></div><div><label>Monto entregado</label><input id="pAmount" placeholder="Ej. 6500"></div><div><label>Saldo restante</label><input id="pRemaining" disabled></div><div><label>Registrado por</label><input id="pBy" value="Mayra"></div><div class="full"><label>Detalle / observación</label><textarea id="pNote" rows="3" placeholder="Ej. Quedó Bs 500 pendiente de la entrega de hoy"></textarea></div></div>
+<div style="height:12px"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="savePayment" class="btn yellow">Guardar cobro</button><button id="savePaymentWhatsapp" class="btn wa">Guardar y abrir WhatsApp</button></div>
+<div id="paymentSuccess" class="payment-success hidden"><b>Pago guardado correctamente.</b><div id="paymentSuccessText" class="muted" style="margin-top:4px"></div><div class="payment-actions"><button id="shareLastPayment" class="btn wa">Enviar saldo por WhatsApp</button></div></div></div></div>
+<div id="moneyModal" class="modal"><div class="box"><div class="mh"><h2>Registrar entrega / depósito</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Responsable</label><input id="mBy" value="Mayra"></div><div><label>Monto</label><input id="mAmount"></div></div><div style="height:12px"></div><button id="saveMoney" class="btn yellow">Registrar</button></div></div>
+<div id="branchModal" class="modal"><div class="box"><div class="mh"><h2>Nueva sucursal</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Nombre</label><input id="bName"></div><div><label>Encargado</label><input id="bManager"></div></div><div style="height:12px"></div><button id="saveBranch" class="btn red">Crear sucursal</button></div></div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id), money=n=>'Bs '+new Intl.NumberFormat('es-BO',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n||0), fmt=n=>new Intl.NumberFormat('es-BO',{maximumFractionDigits:2}).format(n||0);
+const num=v=>{let s=String(v??'').trim().replace(',','.');let n=Number(s);return Number.isFinite(n)?n:0}; const today=()=>new Date().toISOString().slice(0,10);
+const THEME_KEY='viyediControlTheme';
+function applyTheme(theme){
+  const dark=theme==='dark';
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  const topBtn=$('themeToggle'),loginBtn=$('themeToggleLogin');
+  if(topBtn){topBtn.textContent=dark?'☀️':'🌙';topBtn.title=dark?'Cambiar a modo claro':'Cambiar a modo oscuro'}
+  if(loginBtn)loginBtn.textContent=dark?'☀️ Modo claro':'🌙 Modo oscuro';
+}
+function toggleTheme(){
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  const next=dark?'light':'dark';
+  localStorage.setItem(THEME_KEY,next);
+  applyTheme(next);
+}
+applyTheme(localStorage.getItem(THEME_KEY)||'light');
+if($('themeToggle'))$('themeToggle').onclick=toggleTheme;
+if($('themeToggleLogin'))$('themeToggleLogin').onclick=toggleTheme;
+
+let S=JSON.parse(localStorage.getItem('viyediControlState')||'null')||{
+branches:[{name:'Cotoca',manager:'Por definir'},{name:'La Pampa',manager:'Mayra'},{name:'Mercado Retoño',manager:'Por definir'}],
+workers:[{name:'José Mamani',section:'Matador',branch:'Matadero',rate:'Bs 0,14 / pollo'},{name:'Mario Rodríguez',section:'Pelador',branch:'Matadero',rate:'Pendiente'}],
+users:[{name:'Victor',username:'victor28',branch:'Todas',perms:['Todo'],status:'Activo'}],
+clients:[{name:'Gladys Pérez',market:'La Pampa',phone:'+59170000001',balance:3200},{name:'Gabi Flores',market:'Cotoca',phone:'+59170000002',balance:7000}],
+requests:[],payments:[],money:[],advances:[],discounts:[],
+dispatches:[{date:today(),time:'09:18',dest:'La Pampa',boxes:25,kg:548.3,price:19.5,status:'Entregado'},{date:today(),time:'08:41',dest:'Cotoca',boxes:18,kg:388.2,price:19.5,status:'Entregado'}],
+liveEntries:[],activities:[],notifications:[]
+};
+S.clients=S.clients.map((c,i)=>({...c,phone:c.phone||('+5917000000'+(i+1))}));
+S.discounts=S.discounts||[];S.advances=S.advances||[];S.activities=S.activities||[];
+function workerRateText(section){if(section==='Pelador')return 'Bs 0,60 / pollo';if(section==='Matador')return 'Bs 0,14 / pollo';if(section==='Champador')return 'Bs 0,15 / pollo';if(section==='Limpieza')return 'Bs 100 / día';return 'Pendiente'}
+S.workers=S.workers.map(w=>({...w,rate:workerRateText(w.section)}));
+function persist(){localStorage.setItem('viyediControlState',JSON.stringify(S))}
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1800)}
+function stamp(){let d=new Date();return{date:today(),time:d.toLocaleTimeString('es-BO',{hour:'2-digit',minute:'2-digit'})}}
+function notify(title,text){S.notifications.unshift({title,text,time:'Ahora',unread:true});persist();renderNotif()}
+function nav(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$('page-'+p).classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$('title').textContent={home:'Inicio',users:'Usuarios',dispatch:'Despachos',production:'Producción',commercial:'Clientes y Cobranza',branches:'Sucursales',workers:'Trabajadores',reports:'Reportes'}[p]}
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>nav(b.dataset.page));document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>$(b.dataset.open).classList.add('show'));document.querySelectorAll('[data-open="paymentModal"]').forEach(b=>b.addEventListener('click',()=>{if($('paymentSuccess'))$('paymentSuccess').classList.add('hidden');if($('pAmount'))$('pAmount').value='';if($('pNote'))$('pNote').value='';updatePaymentClient()}));document.querySelectorAll('.close').forEach(b=>b.onclick=()=>b.closest('.modal').classList.remove('show'));document.querySelectorAll('.modal').forEach(m=>m.onclick=e=>{if(e.target===m)m.classList.remove('show')});
+function updateQuick(){ $('quickResult').textContent=money(Number($('quickPrice').value)*num($('quickWeight').value)) } $('quickPrice').onchange=updateQuick;$('quickWeight').oninput=updateQuick;updateQuick();
+$('loginButton').onclick=()=>{if($('loginUser').value.trim()==='victor28'&&$('loginPass').value==='demo123'){$('loginError').classList.remove('show');$('loginScreen').classList.add('hidden');$('appShell').classList.remove('hidden')}else $('loginError').classList.add('show')};$('logoutButton').onclick=()=>{$('appShell').classList.add('hidden');$('loginScreen').classList.remove('hidden')};
+$('bell').onclick=()=>{$('notifBox').classList.toggle('show');S.notifications.forEach(n=>n.unread=false);persist();renderNotif()};
+function renderNotif(){$('notifList').innerHTML=S.notifications.map(n=>`<div class="ni ${n.unread?'unread':''}"><b>${n.title}</b><p>${n.text}</p><small>${n.time}</small></div>`).join('')||'<div class="ni muted">Sin notificaciones.</div>'}
+
+function fillSelects(){let br=['Matadero',...S.branches.map(b=>b.name)];$('wBranch').innerHTML=br.map(x=>`<option>${x}</option>`).join('');$('uBranch').innerHTML=['Todas',...S.branches.map(b=>b.name)].map(x=>`<option>${x}</option>`).join('');$('dDest').innerHTML=S.branches.map(x=>`<option>${x.name}</option>`).join('');$('rMarket').innerHTML=S.branches.map(x=>`<option>${x.name}</option>`).join('');$('pClient').innerHTML=S.clients.map(x=>`<option>${x.name}</option>`).join('');updatePaymentClient();$('aWorker').innerHTML=S.workers.map(x=>`<option>${x.name}</option>`).join('');$('discountWorker').innerHTML=S.workers.map(x=>`<option>${x.name}</option>`).join('');$('actWorker').innerHTML=S.workers.map(x=>`<option>${x.name}</option>`).join('')}
+function activityRate(type){if(type==='Pelador')return .60;if(type==='Matador')return .14;if(type==='Champador')return .15;if(type==='Limpieza general'||type==='Lava cajas')return 100;return null}
+function isDailyFixed(type){return type==='Limpieza general'||type==='Lava cajas'}
+function activityPay(a){let r=activityRate(a.type);if(r===null)return null;return isDailyFixed(a.type)?r:a.qty*r}
+function activityQtyText(a){return isDailyFixed(a.type)?'1 día':fmt(a.qty)+' pollos'}
+function isProductiveForCleaning(type){return ['Pelador','Champador','Pintador','Ayudante','Ayudó a champar','Matador'].includes(type)}
+function cleaningDiscountDays(worker,dates){let count=0;for(const date of dates){let acts=S.activities.filter(a=>a.worker===worker&&a.date===date);if(!acts.some(a=>isProductiveForCleaning(a.type)))continue;if(acts.some(a=>a.type==='Matador'))continue;count++}return count}
+function periodDiscounts(worker,dates){return S.discounts.filter(d=>d.worker===worker&&dates.includes(d.date))}
+
+$('saveUser').onclick=()=>{let n=$('uName').value.trim(),u=$('uUser').value.trim();if(!n||!u)return toast('Faltan nombre o usuario');let perms=[...document.querySelectorAll('.perm:checked')].map(x=>x.value);S.users.push({name:n,username:u,branch:$('uBranch').value,perms,status:'Activo'});persist();$('userModal').classList.remove('show');render();toast('Usuario creado')};
+$('saveDispatch').onclick=()=>{let boxes=Number($('dBoxes').value||0),kg=num($('dKg').value),price=num($('dPrice').value);if(boxes<=0||kg<=0)return toast('Faltan cajas o kilos');S.dispatches.unshift({date:$('dDate').value||today(),time:$('dTime').value||stamp().time,dest:$('dDest').value,boxes,kg,price,status:'Entregado'});notify('Despacho entregado',`${boxes} cajas registradas para ${$('dDest').value}.`);$('dispatchModal').classList.remove('show');render()};
+$('lGross').oninput=$('lTare').oninput=()=>{$('lNet').value=fmt(Math.max(0,num($('lGross').value)-num($('lTare').value)))};
+let pendingPhotos=[];$('lPhotos').onchange=async e=>{pendingPhotos=[];$('photoPreview').innerHTML='';for(const f of e.target.files){let data=await new Promise(res=>{let r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(f)});pendingPhotos.push(data);let im=document.createElement('img');im.src=data;$('photoPreview').appendChild(im)}};
+$('saveLive').onclick=()=>{let gross=num($('lGross').value),tare=num($('lTare').value),entry={date:$('lDate').value||today(),farm:$('lFarm').value.trim(),driver:$('lDriver').value.trim(),birds:Number($('lBirds').value||0),gross,tare,net:Math.max(0,gross-tare),price:num($('lPrice').value),photos:pendingPhotos};if(!entry.farm||!entry.birds)return toast('Faltan granja o cantidad');S.liveEntries=S.liveEntries.filter(x=>x.date!==entry.date);S.liveEntries.push(entry);notify('Pollo vivo registrado',`${entry.birds} pollos de ${entry.farm}.`);pendingPhotos=[];persist();$('liveModal').classList.remove('show');render();renderProductionDate()};
+
+function updateActivityForm(){let type=$('actType').value,fixed=isDailyFixed(type);$('actQtyWrap').classList.toggle('hidden',fixed);let r=activityRate(type);$('activityRateHint').innerHTML=fixed?`${type}: <b>${money(r)} por día</b>`:(r===null?`${type}: <b>tarifa pendiente</b>`:`${type}: <b>${money(r)} por pollo</b>`)}
+$('actType').onchange=updateActivityForm;
+function saveActivity(closeAfter=true){let worker=$('actWorker').value,type=$('actType').value,date=$('actDate').value||today(),q=isDailyFixed(type)?1:Number($('actQty').value||0);if(!isDailyFixed(type)&&q<=0)return toast('Cantidad inválida');S.activities.push({date,worker,type,qty:q});persist();render();renderProductionDate();renderWeek();toast('Actividad guardada');if(closeAfter)$('activityModal').classList.remove('show');$('actQty').value='';updateActivityForm()}
+$('saveActivity').onclick=()=>saveActivity(true);$('saveActivityAnother').onclick=()=>saveActivity(false);
+
+$('saveWorker').onclick=()=>{let n=$('wName').value.trim(),s=$('wSection').value;if(!n)return toast('Falta nombre');S.workers.push({name:n,section:s,branch:$('wBranch').value,rate:workerRateText(s)});persist();$('workerModal').classList.remove('show');render()};
+$('saveAdvance').onclick=()=>{let a=num($('aAmount').value);if(a<=0)return toast('Monto inválido');let d=stamp(),date=$('aDate').value||d.date;S.advances.unshift({worker:$('aWorker').value,amount:a,date,time:d.time,reason:$('aReason').value||'—',status:'Pendiente'});persist();$('advanceModal').classList.remove('show');render();renderWeek();toast('Adelanto registrado')};
+$('saveDiscount').onclick=()=>{let amount=num($('discountAmount').value),reason=$('discountReason').value.trim(),date=$('discountDate').value||today(),worker=$('discountWorker').value;if(amount<=0)return toast('Monto inválido');if(!reason)return toast('Escribí el motivo');S.discounts.unshift({worker,amount,date,reason,createdAt:new Date().toISOString()});persist();$('discountModal').classList.remove('show');$('discountAmount').value='';$('discountReason').value='';render();renderWeek();toast('Descuento vario guardado')};
+function openDiscountDetail(worker,dates){let items=periodDiscounts(worker,dates);$('discountDetailList').innerHTML=items.length?items.map(d=>`<div class="discount-item"><b>${money(d.amount)} · ${d.date}</b><span>${d.reason}</span></div>`).join(''):'<div class="muted">Sin descuentos varios en este periodo.</div>';$('discountDetailModal').classList.add('show')};
+$('saveRequest').onclick=()=>{let n=$('rName').value.trim();if(!n)return toast('Falta nombre');S.requests.unshift({name:n,market:$('rMarket').value,phone:$('rPhone').value.trim(),by:'Mayra',status:'Pendiente'});notify('Solicitud de cliente',`${n} espera aprobación.`);$('requestModal').classList.remove('show');render()};
+function normalizePhone(v){return String(v||'').replace(/[^\d]/g,'')}
+function selectedPaymentClient(){return S.clients.find(x=>x.name===$('pClient').value)}
+function updatePaymentClient(){if(!$('pClient'))return;let c=selectedPaymentClient();if(!c)return;$('pPhone').value=c.phone||'Sin número';$('pDebt').value=money(c.balance||0);updatePaymentRemaining()}
+function updatePaymentRemaining(){let c=selectedPaymentClient(),amount=num($('pAmount').value);if(!c)return;$('pRemaining').value=money(Math.max(0,(c.balance||0)-amount))}
+$('pClient').onchange=updatePaymentClient;$('pAmount').oninput=updatePaymentRemaining;
+function buildWhatsAppPaymentText(payment){return `*VIYEDI - Detalle de pago*\nCliente: ${payment.client}\nFecha: ${payment.date}\nHora: ${payment.time}\nCuenta antes del pago: ${money(payment.previousBalance)}\nPago recibido: ${money(payment.amount)}\nSaldo restante: ${money(payment.remainingBalance)}\nRegistrado por: ${payment.by}${payment.note?`\nDetalle: ${payment.note}`:''}\n\nGracias.`}
+function openPaymentWhatsApp(payment){let c=S.clients.find(x=>x.name===payment.client),phone=normalizePhone(c?.phone);if(!phone){toast('El cliente no tiene número de WhatsApp registrado');return}window.open(`https://wa.me/${phone}?text=${encodeURIComponent(buildWhatsAppPaymentText(payment))}`,'_blank')}
+function registerPayment(openWhatsapp=false){let a=num($('pAmount').value),c=selectedPaymentClient(),d=stamp();if(!c)return toast('Elegí un cliente');if(a<=0)return toast('Monto inválido');if(a>(c.balance||0))return toast('El pago supera el saldo actual');let previous=c.balance||0,remaining=Math.max(0,previous-a);c.balance=remaining;let payment={client:c.name,amount:a,date:d.date,time:d.time,by:$('pBy').value.trim()||'Sin identificar',note:$('pNote').value.trim(),previousBalance:previous,remainingBalance:remaining};S.payments.unshift(payment);notify('Cobro registrado',`${payment.by} registró ${money(a)} de ${c.name}. Saldo: ${money(remaining)}.`);persist();$('paymentSuccess').classList.remove('hidden');$('paymentSuccessText').textContent=`${c.name}: pagó ${money(a)} · saldo ${money(remaining)} · ${d.date} ${d.time}`;$('shareLastPayment').onclick=()=>openPaymentWhatsApp(payment);render();updatePaymentClient();if(openWhatsapp)openPaymentWhatsApp(payment);toast('Cobro guardado')}
+$('savePayment').onclick=()=>registerPayment(false);
+$('savePaymentWhatsapp').onclick=()=>registerPayment(true);
+$('saveMoney').onclick=()=>{let a=num($('mAmount').value),d=stamp();if(a<=0)return toast('Monto inválido');S.money.unshift({by:$('mBy').value,amount:a,date:d.date,time:d.time,status:'Pendiente de verificación'});persist();$('moneyModal').classList.remove('show');render()};
+$('saveBranch').onclick=()=>{let n=$('bName').value.trim();if(!n)return toast('Falta nombre');S.branches.push({name:n,manager:$('bManager').value||'Por definir'});persist();$('branchModal').classList.remove('show');render()};
+
+$('productionDate').value=today();$('productionDate').onchange=renderProductionDate;
+function renderProductionDate(){let date=$('productionDate').value,live=S.liveEntries.find(x=>x.date===date);$('pBirds').textContent=live?fmt(live.birds):'—';$('pFarm').textContent=live?live.farm:'—';$('pPrice').textContent=live?money(live.price):'—';$('pNet').textContent=live?fmt(live.net)+' kg':'—';let acts=S.activities.filter(a=>a.date===date);$('dailyProdBody').innerHTML=acts.map(a=>{let r=activityRate(a.type),pay=activityPay(a),rateText=r===null?'<span class="badge off">Tarifa pendiente</span>':(isDailyFixed(a.type)?money(r)+'/día':money(r)+'/pollo');return `<tr><td><b>${a.worker}</b></td><td>${a.type}</td><td>${activityQtyText(a)}</td><td>${rateText}</td><td>${pay===null?'—':money(pay)}</td></tr>`}).join('')||'<tr><td colspan="5" class="muted">Sin actividades registradas para esta fecha.</td></tr>'}
+
+let weekDraft={};
+let activeWeekDayIndex=0;
+
+let weekGridDraft={};
+let selectedCell={worker:null,date:null};
+let cellDraft=null;
+let weekDirty=false;
+
+function mondaySundayDates(ref){
+  let d=new Date((ref||today())+'T12:00:00');
+  let day=d.getDay();
+  let delta=(day+6)%7; // Monday = 0
+  d.setDate(d.getDate()-delta);
+  let arr=[];
+  for(let i=0;i<7;i++){let x=new Date(d);x.setDate(d.getDate()+i);arr.push(x.toISOString().slice(0,10))}
+  return arr;
+}
+function paymentTuesdayForWeek(dates){
+  let d=new Date(dates[6]+'T12:00:00'); // Sunday
+  d.setDate(d.getDate()+2);
+  return d.toISOString().slice(0,10);
+}
+function shortDayName(dateStr){
+  return new Date(dateStr+'T12:00:00').toLocaleDateString('es-BO',{weekday:'short'}).replace('.','');
+}
+function dayDateLabel(dateStr){
+  let d=new Date(dateStr+'T12:00:00');
+  return `${shortDayName(dateStr)} ${String(d.getDate()).padStart(2,'0')}`;
+}
+function longDateLabel(dateStr){
+  return new Date(dateStr+'T12:00:00').toLocaleDateString('es-BO',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+function draftKey(worker,date){return worker+'|||'+date}
+function storedCellState(worker,date){
+  let acts=S.activities.filter(a=>a.worker===worker&&a.date===date).map(a=>{
+    let fixed=isDailyFixed(a.type);
+    let trips=Array.isArray(a.trips)?a.trips.map(Number).filter(x=>x>=0):(fixed?[]:[Number(a.qty||0)].filter(x=>x>0));
+    return {type:a.type,trips,qty:fixed?1:trips.reduce((x,n)=>x+n,0)}
+  });
+  let noWork=(S.weekNoWork||[]).some(x=>x.worker===worker&&x.date===date);
+  if(noWork)return {worked:false,activities:[]};
+  if(acts.length)return {worked:true,activities:acts};
+  return {worked:null,activities:[]};
+}
+function cloneCellState(s){return JSON.parse(JSON.stringify(s))}
+function loadWeekGridDraft(){
+  let dates=mondaySundayDates($('weekDate').value||today());
+  weekGridDraft={};
+  for(const w of S.workers){
+    for(const date of dates)weekGridDraft[draftKey(w.name,date)]=storedCellState(w.name,date);
+  }
+  weekDirty=false;
+  renderWeeklyMatrix();
+}
+function getDraftCell(worker,date){
+  let k=draftKey(worker,date);
+  if(!weekGridDraft[k])weekGridDraft[k]=storedCellState(worker,date);
+  return weekGridDraft[k];
+}
+function activityTotalQty(a){
+  if(isDailyFixed(a.type))return 1;
+  if(Array.isArray(a.trips))return a.trips.reduce((x,n)=>x+Number(n||0),0);
+  return Number(a.qty||0);
+}
+function draftCellActs(worker,date,stateOverride=null){
+  let st=stateOverride||getDraftCell(worker,date);
+  if(st.worked!==true)return [];
+  return (st.activities||[]).map(a=>({
+    worker,date,type:a.type,
+    trips:Array.isArray(a.trips)?a.trips.map(Number):[],
+    qty:isDailyFixed(a.type)?1:activityTotalQty(a)
+  })).filter(a=>isDailyFixed(a.type)||a.qty>0);
+}
+function weeklyActsForWorker(worker,dates){
+  let out=[];
+  for(const date of dates)out.push(...draftCellActs(worker,date));
+  return out;
+}
+function summaryFromActs(worker,dates,acts){
+  let sumQty=t=>acts.filter(a=>a.type===t).reduce((x,a)=>x+(a.qty||0),0);
+  let sumPay=t=>acts.filter(a=>a.type===t).reduce((x,a)=>x+(activityPay(a)||0),0);
+  let cleaningDays=[...new Set(acts.filter(a=>a.type==='Limpieza general').map(a=>a.date))].length;
+  let boxesDays=[...new Set(acts.filter(a=>a.type==='Lava cajas').map(a=>a.date))].length;
+  let workedDays=dates.filter(date=>getDraftCell(worker,date).worked===true).length;
+  let cleanDiscDays=0;
+  for(const date of dates){
+    let dayActs=acts.filter(a=>a.date===date);
+    if(!dayActs.some(a=>isProductiveForCleaning(a.type)))continue;
+    if(dayActs.some(a=>a.type==='Matador'))continue;
+    cleanDiscDays++;
+  }
+  let cleanDisc=cleanDiscDays*5;
+  let advances=S.advances.filter(a=>a.worker===worker&&dates.includes(a.date)).reduce((x,a)=>x+a.amount,0);
+  let discounts=periodDiscounts(worker,dates),discountTotal=discounts.reduce((x,d)=>x+d.amount,0);
+  let gross=acts.reduce((x,a)=>x+(activityPay(a)||0),0);
+  let pending=acts.some(a=>activityPay(a)===null);
+  return {worker,acts,pelado:sumQty('Pelador'),peladoBs:sumPay('Pelador'),matanza:sumQty('Matador'),matanzaBs:sumPay('Matador'),champado:sumQty('Champador'),champadoBs:sumPay('Champador'),cleaningDays,cleaningBs:sumPay('Limpieza general'),boxesDays,boxesBs:sumPay('Lava cajas'),workedDays,cleanDiscDays,cleanDisc,advances,discounts,discountTotal,gross,net:gross-cleanDisc-advances-discountTotal,pending}
+}
+function cellCompactHTML(worker,date){
+  let st=getDraftCell(worker,date);
+  if(st.worked===false)return '<span style="font-size:18px">X</span>';
+  if(st.worked===null)return '—';
+  let acts=draftCellActs(worker,date);
+  if(!acts.length)return '<span class="muted">Trabajó<br>sin cantidad</span>';
+  let names={'Pelador':'Peló','Matador':'Mató','Champador':'Champó','Ayudó a champar':'Ay. champó','Pintador':'Pintó','Ayudante':'Ayudó','Limpieza general':'Limpieza','Lava cajas':'Lava cajas'};
+  return acts.map(a=>`<span class="week-cell-line">${names[a.type]||a.type}${isDailyFixed(a.type)?'':` <strong>${fmt(a.qty)}</strong>`}</span>`).join('');
+}
+function renderWeeklyMatrix(){
+  let dates=mondaySundayDates($('weekDate').value||today());
+  let paymentDate=paymentTuesdayForWeek(dates);
+  $('weekPayDate').value=paymentDate;
+  $('weekRangeText').innerHTML=`<b>Semana pagada:</b> ${longDateLabel(dates[0])} → ${longDateLabel(dates[6])} &nbsp; · &nbsp; <b>Pago:</b> martes ${new Date(paymentDate+'T12:00:00').getDate()}`;
+
+  $('weekMatrixHead').innerHTML=`<th>N°</th><th>Trabajador</th>${dates.map(d=>`<th><button class="day-head-btn" data-day="${d}">${shortDayName(d).toUpperCase()}<small>${new Date(d+'T12:00:00').getDate()}</small></button></th>`).join('')}<th>A pagar</th>`;
+
+  $('weekMatrixBody').innerHTML=S.workers.map((w,idx)=>{
+    let acts=weeklyActsForWorker(w.name,dates),sum=summaryFromActs(w.name,dates,acts);
+    return `<tr><td class="worker-no">${idx+1}</td><td class="worker-name">${w.name}<div class="muted">${w.section}</div></td>${dates.map(d=>{let st=getDraftCell(w.name,d),cls=st.worked===false?'no-work':st.worked===null?'empty':'has-data';return `<td><button class="week-cell-btn ${cls}" data-worker="${w.name}" data-date="${d}">${cellCompactHTML(w.name,d)}</button></td>`}).join('')}<td class="week-pay-total">${money(sum.net)}${sum.pending?' *':''}</td></tr>`;
+  }).join('');
+
+  document.querySelectorAll('.week-cell-btn').forEach(b=>b.onclick=()=>openWeekCell(b.dataset.worker,b.dataset.date));
+  document.querySelectorAll('.day-head-btn').forEach(b=>b.onclick=()=>openDaySummary(b.dataset.day));
+
+  renderWeekPayrollTable();
+  renderWeekTopSummary();
+  $('weekPendingSummary').textContent=weekDirty?'Cambios sin guardar':'Sin cambios pendientes';
+}
+function renderWeekTopSummary(){
+  let dates=mondaySundayDates($('weekDate').value||today());
+  let total=0,clean=0,days=new Set();
+  for(const w of S.workers){
+    let acts=weeklyActsForWorker(w.name,dates),s=summaryFromActs(w.name,dates,acts);
+    total+=s.net;clean+=s.cleanDisc;
+    for(const a of acts)days.add(a.date);
+  }
+  $('weekWorkersCount').textContent=S.workers.length;
+  $('weekDaysWithData').textContent=days.size;
+  $('weekCleaningDiscount').textContent=money(clean);
+  $('weekGrandTotal').textContent=money(total);
+}
+function renderWeekPayrollTable(){
+  let dates=mondaySundayDates($('weekDate').value||today());
+  $('weekPayrollBody').innerHTML=S.workers.map(w=>{
+    let x=summaryFromActs(w.name,dates,weeklyActsForWorker(w.name,dates));
+    return `<tr><td><b>${w.name}</b></td><td>${x.pelado||'—'}</td><td>${x.pelado?money(x.peladoBs):'—'}</td><td>${x.matanza||'—'}</td><td>${x.matanza?money(x.matanzaBs):'—'}</td><td>${x.champado||'—'}</td><td>${x.champado?money(x.champadoBs):'—'}</td><td>${x.cleaningDays||'—'}</td><td>${x.cleaningDays?money(x.cleaningBs):'—'}</td><td>${x.boxesDays||'—'}</td><td>${x.boxesDays?money(x.boxesBs):'—'}</td><td>${x.workedDays||'—'}</td><td>${money(x.cleanDisc)}</td><td>${money(x.advances)}</td><td>${x.discountTotal?`<button class="click-cell view-discount" data-worker="${w.name}">${money(x.discountTotal)}</button>`:money(0)}</td><td class="total-cell">${money(x.net)}${x.pending?' *':''}</td></tr>`
+  }).join('');
+  document.querySelectorAll('.view-discount').forEach(b=>b.onclick=()=>openDiscountDetail(b.dataset.worker,dates));
+}
+
+function openWeekCell(worker,date){
+  selectedCell={worker,date};
+  cellDraft=cloneCellState(getDraftCell(worker,date));
+  $('weekCellTitle').textContent=worker;
+  $('weekCellSubtitle').textContent=longDateLabel(date);
+  renderCellEditor();
+  $('weekCellModal').classList.add('show');
+}
+function renderCellEditor(){
+  let st=cellDraft;
+  $('cellWorkedYes').classList.toggle('active',st.worked===true);
+  $('cellWorkedNo').classList.toggle('active',st.worked===false);
+  $('cellActivitiesArea').classList.toggle('hidden',st.worked===false);
+
+  $('cellActivityCards').innerHTML=(st.activities||[]).map((a,i)=>{
+    let fixed=isDailyFixed(a.type);
+    let trips=Array.isArray(a.trips)?a.trips:[];
+    let r=activityRate(a.type);
+    let rateText=r===null?'Tarifa pendiente':(fixed?money(r)+'/día':money(r)+'/pollo');
+    return `<div class="trip-activity-card">
+      <div class="trip-head"><div><h4>Actividad ${i+1}</h4><div class="muted">${rateText}</div></div><button class="btn outline remove-cell-activity" data-i="${i}">Quitar actividad</button></div>
+      <div style="margin-top:10px"><label>¿Qué hizo?</label><select class="cell-type" data-i="${i}">${['Pelador','Matador','Champador','Ayudó a champar','Pintador','Ayudante','Limpieza general','Lava cajas'].map(t=>`<option ${t===a.type?'selected':''}>${t}</option>`).join('')}</select></div>
+      ${fixed?`<div class="trip-total">1 día · ${money(r)}</div>`:`<div class="trip-list">${trips.map((v,j)=>`<div class="trip-box"><label>Viaje ${j+1}</label><input class="trip-input" data-ai="${i}" data-ti="${j}" type="number" value="${v||''}"></div>`).join('')}</div><div style="margin-top:8px"><button class="btn outline add-trip" data-i="${i}">+ Agregar viaje</button></div><div class="trip-total">Total actividad: ${fmt(trips.reduce((x,n)=>x+Number(n||0),0))} pollos</div>`}
+    </div>`;
+  }).join('');
+
+  if(st.worked===true && !st.activities.length)$('cellActivityCards').innerHTML='<div class="muted" style="margin-top:10px">Todavía no agregaste una actividad.</div>';
+
+  document.querySelectorAll('.cell-type').forEach(el=>el.onchange=()=>{
+    let a=cellDraft.activities[Number(el.dataset.i)];a.type=el.value;
+    if(isDailyFixed(a.type)){a.trips=[];a.qty=1}else if(!Array.isArray(a.trips)||!a.trips.length)a.trips=[0];
+    renderCellEditor();
+  });
+  document.querySelectorAll('.trip-input').forEach(el=>el.oninput=()=>{
+    let a=cellDraft.activities[Number(el.dataset.ai)];a.trips[Number(el.dataset.ti)]=Number(el.value||0);renderCellTotals();
+  });
+  document.querySelectorAll('.add-trip').forEach(el=>el.onclick=()=>{
+    cellDraft.activities[Number(el.dataset.i)].trips.push(0);renderCellEditor();
+  });
+  document.querySelectorAll('.remove-cell-activity').forEach(el=>el.onclick=()=>{
+    cellDraft.activities.splice(Number(el.dataset.i),1);renderCellEditor();
+  });
+  renderCellTotals();
+}
+function renderCellTotals(){
+  let acts=draftCellActs(selectedCell.worker,selectedCell.date,cellDraft);
+  let labels=acts.map(a=>`${a.type}: ${isDailyFixed(a.type)?'1 día':fmt(a.qty)+' pollos'}`).join(' · ');
+  $('cellDayTotal').textContent=labels||'—';
+  $('cellDayPay').textContent=money(acts.reduce((x,a)=>x+(activityPay(a)||0),0));
+}
+$('cellWorkedYes').onclick=()=>{
+  cellDraft.worked=true;
+  if(!cellDraft.activities.length)cellDraft.activities=[{type:'Pelador',trips:[0],qty:0}];
+  renderCellEditor();
+};
+$('cellWorkedNo').onclick=()=>{cellDraft={worked:false,activities:[]};renderCellEditor()};
+$('addCellActivity').onclick=()=>{
+  cellDraft.worked=true;cellDraft.activities.push({type:'Pelador',trips:[0],qty:0});renderCellEditor();
+};
+$('applyCellDraft').onclick=()=>{
+  weekGridDraft[draftKey(selectedCell.worker,selectedCell.date)]=cloneCellState(cellDraft);
+  weekDirty=true;
+  $('weekCellModal').classList.remove('show');
+  renderWeeklyMatrix();
+};
+
+function openDaySummary(date){
+  let pelado=0,matanza=0,champado=0,worked=0;
+  let blocks=[];
+  for(const w of S.workers){
+    let st=getDraftCell(w.name,date);
+    if(st.worked===false){blocks.push(`<div class="day-summary-worker"><h4>${w.name}</h4><span class="badge off">No trabajó</span></div>`);continue}
+    let acts=draftCellActs(w.name,date);
+    if(!acts.length)continue;
+    worked++;
+    let lines=acts.map(a=>{
+      if(a.type==='Pelador')pelado+=a.qty;if(a.type==='Matador')matanza+=a.qty;if(a.type==='Champador')champado+=a.qty;
+      if(isDailyFixed(a.type))return `<div class="eq">${a.type}: 1 día</div>`;
+      let trips=(a.trips||[]).filter(n=>Number(n)>0);
+      return `<div class="eq">${a.type}: ${trips.length?trips.join(' + ')+' = ':''}<b>${fmt(a.qty)}</b></div>`;
+    }).join('');
+    blocks.push(`<div class="day-summary-worker"><h4>${w.name}</h4>${lines}</div>`);
+  }
+  $('daySummaryTitle').textContent=longDateLabel(date);
+  $('daySummarySubtitle').textContent='Detalle completo de la producción registrada';
+  $('daySummaryTotals').innerHTML=`<div class="card metric"><span>Trabajadores</span><b>${worked}</b></div><div class="card metric o"><span>Total pelado</span><b>${fmt(pelado)}</b></div><div class="card metric y"><span>Total matado</span><b>${fmt(matanza)}</b></div><div class="card metric n"><span>Total champado</span><b>${fmt(champado)}</b></div>`;
+  $('daySummaryWorkers').innerHTML=blocks.join('')||'<div class="muted">No hay registros para este día.</div>';
+  $('daySummaryModal').classList.add('show');
+}
+
+$('openWeekly').onclick=()=>{
+  $('weekDate').value=$('productionDate').value||today();
+  $('weeklyModal').classList.add('show');
+  loadWeekGridDraft();
+};
+$('weekDate').onchange=loadWeekGridDraft;
+
+$('saveWholeWeek').onclick=()=>{
+  let dates=mondaySundayDates($('weekDate').value||today());
+  S.activities=S.activities.filter(a=>!dates.includes(a.date));
+  S.weekNoWork=S.weekNoWork||[];
+  S.weekNoWork=S.weekNoWork.filter(x=>!dates.includes(x.date));
+
+  for(const w of S.workers){
+    for(const date of dates){
+      let st=getDraftCell(w.name,date);
+      if(st.worked===false){S.weekNoWork.push({worker:w.name,date});continue}
+      if(st.worked!==true)continue;
+      for(const a of st.activities||[]){
+        if(isDailyFixed(a.type)){S.activities.push({worker:w.name,date,type:a.type,qty:1,trips:[]});continue}
+        let trips=(a.trips||[]).map(Number).filter(n=>n>0),qty=trips.reduce((x,n)=>x+n,0);
+        if(qty<=0)continue;
+        S.activities.push({worker:w.name,date,type:a.type,qty,trips});
+      }
+    }
+  }
+  persist();weekDirty=false;render();loadWeekGridDraft();
+  notify('Planilla semanal guardada',`Se guardó la semana del ${dates[0]} al ${dates[6]}.`);
+  toast('Semana completa guardada');
+};
+
+$('downloadWeek').onclick=()=>{
+  let dates=mondaySundayDates($('weekDate').value||today());
+  let lines=['N,Trabajador,Lunes,Martes,Miercoles,Jueves,Viernes,Sabado,Domingo,Pelado Bs,Matanza Bs,Champado Bs,Limpieza Bs,Lava cajas Bs,Desc limpieza,Adelantos,Descuento vario,Total'];
+  S.workers.forEach((w,i)=>{
+    let dayCells=dates.map(d=>{let st=getDraftCell(w.name,d);if(st.worked===false)return 'X';let acts=draftCellActs(w.name,d);return acts.map(a=>`${a.type}:${isDailyFixed(a.type)?'1dia':a.qty}`).join('|')});
+    let s=summaryFromActs(w.name,dates,weeklyActsForWorker(w.name,dates));
+    lines.push([i+1,w.name,...dayCells,s.peladoBs.toFixed(2),s.matanzaBs.toFixed(2),s.champadoBs.toFixed(2),s.cleaningBs.toFixed(2),s.boxesBs.toFixed(2),s.cleanDisc.toFixed(2),s.advances.toFixed(2),s.discountTotal.toFixed(2),s.net.toFixed(2)].map(v=>`"${String(v).replaceAll('"','""')}"`).join(','));
+  });
+  let blob=new Blob(['\ufeff'+lines.join('\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='planilla_semanal_VIYEDI.csv';a.click();URL.revokeObjectURL(url);
+};
+let activeBranch=null;$('branchDate').value=today();$('branchDate').onchange=renderBranchDetail;
+function openBranch(name){activeBranch=name;$('branchDetailTitle').textContent=name;$('branchDate').value=today();$('branchDetailModal').classList.add('show');renderBranchDetail()}
+function renderBranchDetail(){if(!activeBranch)return;let date=$('branchDate').value,ds=S.dispatches.filter(d=>d.dest===activeBranch&&d.date===date),workers=S.workers.filter(w=>w.branch===activeBranch).length;$('bdBoxes').textContent=ds.reduce((a,b)=>a+b.boxes,0);$('bdKg').textContent=fmt(ds.reduce((a,b)=>a+b.kg,0));$('bdPrice').textContent=ds.length?money(ds[ds.length-1].price)+'/kg':'—';$('bdWorkers').textContent=workers;$('bdTable').innerHTML=ds.map(d=>`<tr><td>${d.time}</td><td>${d.boxes}</td><td>${fmt(d.kg)}</td><td>${money(d.price)}</td></tr>`).join('')||'<tr><td colspan="4" class="muted">Sin despachos ese día.</td></tr>'}
+
+let wf='Todos';document.querySelectorAll('[data-wf]').forEach(b=>b.onclick=()=>{wf=b.dataset.wf;document.querySelectorAll('[data-wf]').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderWorkers()});
+function renderWorkers(){$('workerBody').innerHTML=S.workers.filter(w=>wf==='Todos'||w.section===wf).map(w=>`<tr><td><b>${w.name}</b></td><td>${w.section}</td><td>${w.branch}</td><td>${w.rate}</td></tr>`).join('')}
+
+function render(){fillSelects();renderNotif();$('dDate').value=$('dDate').value||today();$('dTime').value=$('dTime').value||stamp().time;$('lDate').value=$('lDate').value||today();$('actDate').value=$('actDate').value||today();$('aDate').value=$('aDate').value||today();$('discountDate').value=$('discountDate').value||today();updateActivityForm();
+$('userBody').innerHTML=S.users.map(u=>`<tr><td><b>${u.name}</b></td><td>${u.username}</td><td>${u.branch}</td><td>${u.perms.join(', ')}</td><td><span class="badge ok">${u.status}</span></td></tr>`).join('');
+$('dispatchBody').innerHTML=S.dispatches.map(d=>`<tr><td>${d.date} ${d.time}</td><td>${d.dest}</td><td>${d.boxes}</td><td>${fmt(d.kg)}</td><td>${money(d.price)}</td><td><span class="badge ok">${d.status}</span></td></tr>`).join('');
+$('clientBody').innerHTML=S.clients.map(c=>`<tr><td><b>${c.name}</b></td><td>${c.market}</td><td>${c.phone||'—'}</td><td>${money(c.balance)}</td></tr>`).join('');
+$('reqList').innerHTML=S.requests.map((r,i)=>`<div class="notice"><b>${r.name}</b><br>${r.market} · ${r.by}<br><span class="badge ${r.status==='Pendiente'?'wait':'ok'}">${r.status}</span>${r.status==='Pendiente'?`<br><br><button class="btn outline approve" data-i="${i}">Aprobar</button>`:''}</div><br>`).join('')||'<span class="muted">Sin solicitudes.</span>';document.querySelectorAll('.approve').forEach(b=>b.onclick=()=>{let r=S.requests[Number(b.dataset.i)];r.status='Aprobada';S.clients.push({name:r.name,market:r.market,phone:r.phone||'',balance:0});persist();render()});
+$('payBody').innerHTML=S.payments.map((p,i)=>`<tr><td>${p.client}</td><td>${money(p.amount)}</td><td>${p.date}</td><td>${p.time}</td><td>${p.by}<br><button class="btn wa send-old-payment" data-i="${i}" style="padding:5px 7px;margin-top:5px;font-size:10px">WhatsApp</button></td></tr>`).join('');document.querySelectorAll('.send-old-payment').forEach(b=>b.onclick=()=>{let p=S.payments[Number(b.dataset.i)];if(p.previousBalance===undefined){let c=S.clients.find(x=>x.name===p.client);p={...p,previousBalance:(c?.balance||0)+p.amount,remainingBalance:(c?.balance||0),note:p.note||''}}openPaymentWhatsApp(p)});
+$('moneyBody').innerHTML=S.money.map(m=>`<tr><td>${m.by}</td><td>${money(m.amount)}</td><td>${m.date} ${m.time}</td><td><span class="badge wait">${m.status}</span></td></tr>`).join('');
+$('branchGrid').innerHTML=S.branches.map(b=>{let ds=S.dispatches.filter(d=>d.dest===b.name&&d.date===today()),ws=S.workers.filter(w=>w.branch===b.name).length;return `<div class="card branch-card" data-branch="${b.name}"><h3>${b.name}</h3><div class="muted">Encargado: ${b.manager}</div><p><b>${ws}</b> trabajadores · <b>${ds.reduce((a,d)=>a+d.boxes,0)}</b> cajas · <b>${fmt(ds.reduce((a,d)=>a+d.kg,0))}</b> kg</p></div>`}).join('');document.querySelectorAll('.branch-card').forEach(b=>b.onclick=()=>openBranch(b.dataset.branch));
+renderWorkers();$('advanceBody').innerHTML=S.advances.map(a=>`<tr><td>${a.worker}</td><td>${money(a.amount)}</td><td>${a.date} ${a.time}</td><td>${a.reason}</td><td><span class="badge wait">${a.status}</span></td></tr>`).join('')||'<tr><td colspan="5" class="muted">Sin adelantos.</td></tr>';$('discountBody').innerHTML=S.discounts.map(d=>`<tr><td>${d.worker}</td><td>${money(d.amount)}</td><td>${d.date}</td><td>${d.reason}</td></tr>`).join('')||'<tr><td colspan="4" class="muted">Sin descuentos varios.</td></tr>';
+$('mD').textContent=S.dispatches.length;$('mB').textContent=S.dispatches.reduce((a,b)=>a+b.boxes,0);$('mC').textContent=money(S.payments.reduce((a,b)=>a+b.amount,0));$('mA').textContent=money(S.advances.reduce((a,b)=>a+b.amount,0));renderProductionDate()}
+render();persist();
+</script>
+</body></html>
