@@ -627,4 +627,15 @@ renderWorkers();$('advanceBody').innerHTML=S.advances.map(a=>`<tr><td>${a.worker
 $('mD').textContent=S.dispatches.length;$('mB').textContent=S.dispatches.reduce((a,b)=>a+b.boxes,0);$('mC').textContent=money(S.payments.reduce((a,b)=>a+b.amount,0));$('mA').textContent=money(S.advances.reduce((a,b)=>a+b.amount,0));renderProductionDate()}
 render();persist();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+<script>
+  const SUPABASE_URL = "https://ocduttkmlsnzrydrxwgb.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_9-zpE5B4phsUDwEdAH-VhA_jHbc8MgP";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+</script>
 </body></html>
