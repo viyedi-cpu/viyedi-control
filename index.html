@@ -262,7 +262,7 @@ applyTheme(localStorage.getItem(THEME_KEY)||'light');
 if($('themeToggle'))$('themeToggle').onclick=toggleTheme;
 if($('themeToggleLogin'))$('themeToggleLogin').onclick=toggleTheme;
 
-let S=JSON.parse(localStorage.getItem('viyediControlState')||'null')||{
+let S=JSON.parse(localStorage.getItem('viyediControlState‐v2')||'null')||{
 branches:[{name:'Cotoca',manager:'Por definir'},{name:'La Pampa',manager:'Mayra'},{name:'Mercado Retoño',manager:'Por definir'}],
 workers:[{name:'José Mamani',section:'Matador',branch:'Matadero',rate:'Bs 0,14 / pollo'},{name:'Mario Rodríguez',section:'Pelador',branch:'Matadero',rate:'Pendiente'}],
 users:[{name:'Victor',username:'victor28',branch:'Todas',perms:['Todo'],status:'Activo'}],
@@ -275,7 +275,7 @@ S.clients=S.clients.map((c,i)=>({...c,phone:c.phone||('+5917000000'+(i+1))}));
 S.discounts=S.discounts||[];S.advances=S.advances||[];S.activities=S.activities||[];
 function workerRateText(section){if(section==='Pelador')return 'Bs 0,60 / pollo';if(section==='Matador')return 'Bs 0,14 / pollo';if(section==='Champador')return 'Bs 0,15 / pollo';if(section==='Limpieza')return 'Bs 100 / día';return 'Pendiente'}
 S.workers=S.workers.map(w=>({...w,rate:workerRateText(w.section)}));
-function persist(){localStorage.setItem('viyediControlState',JSON.stringify(S))}
+function persist(){localStorage.setItem('viyediControlState‐v2',JSON.stringify(S))}
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1800)}
 function stamp(){let d=new Date();return{date:today(),time:d.toLocaleTimeString('es-BO',{hour:'2-digit',minute:'2-digit'})}}
 function notify(title,text){S.notifications.unshift({title,text,time:'Ahora',unread:true});persist();renderNotif()}
