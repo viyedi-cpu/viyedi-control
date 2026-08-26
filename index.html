@@ -233,10 +233,10 @@ body,.side,.top,.card,.act,.box,.notifs,.login-card,input,select,textarea{transi
 
 <div id="requestModal" class="modal"><div class="box"><div class="mh"><h2>Solicitar cliente</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Nombre</label><input id="rName"></div><div><label>Mercado</label><select id="rMarket"></select></div><div><label>Teléfono / WhatsApp</label><input id="rPhone" placeholder="+5917XXXXXXX"></div></div><div style="height:12px"></div><button id="saveRequest" class="btn red">Enviar solicitud</button></div></div>
 <div id="paymentModal" class="modal"><div class="box"><div class="mh"><h2>Registrar cobro</h2><button class="btn outline close">Cerrar</button></div>
-<div class="form"><div><label>Cliente</label><select id="pClient"></select></div><div><label>Teléfono WhatsApp</label><input id="pPhone" disabled></div><div><label>Saldo / cuenta antes del pago</label><input id="pDebt" disabled></div><div><label>Monto entregado</label><input id="pAmount" placeholder="Ej. 6500"></div><div><label>Saldo restante</label><input id="pRemaining" disabled></div><div><label>Registrado por</label><input id="pBy" value="Mayra"></div><div class="full"><label>Detalle / observación</label><textarea id="pNote" rows="3" placeholder="Ej. Quedó Bs 500 pendiente de la entrega de hoy"></textarea></div></div>
+<div class="form"><div><label>Cliente</label><select id="pClient"></select></div><div><label>Teléfono WhatsApp</label><input id="pPhone" disabled></div><div><label>Saldo / cuenta antes del pago</label><input id="pDebt" disabled></div><div><label>Monto entregado</label><input id="pAmount" placeholder="Ej. 6500"></div><div><label>Saldo restante</label><input id="pRemaining" disabled></div><div><label>Registrado por</label><input id="pBy"></div><div class="full"><label>Detalle / observación</label><textarea id="pNote" rows="3" placeholder="Ej. Quedó Bs 500 pendiente de la entrega de hoy"></textarea></div></div>
 <div style="height:12px"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="savePayment" class="btn yellow">Guardar cobro</button><button id="savePaymentWhatsapp" class="btn wa">Guardar y abrir WhatsApp</button></div>
 <div id="paymentSuccess" class="payment-success hidden"><b>Pago guardado correctamente.</b><div id="paymentSuccessText" class="muted" style="margin-top:4px"></div><div class="payment-actions"><button id="shareLastPayment" class="btn wa">Enviar saldo por WhatsApp</button></div></div></div></div>
-<div id="moneyModal" class="modal"><div class="box"><div class="mh"><h2>Registrar entrega / depósito</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Responsable</label><input id="mBy" value="Mayra"></div><div><label>Monto</label><input id="mAmount"></div></div><div style="height:12px"></div><button id="saveMoney" class="btn yellow">Registrar</button></div></div>
+<div id="moneyModal" class="modal"><div class="box"><div class="mh"><h2>Registrar entrega / depósito</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Responsable</label><input id="mBy"></div><div><label>Monto</label><input id="mAmount"></div></div><div style="height:12px"></div><button id="saveMoney" class="btn yellow">Registrar</button></div></div>
 <div id="branchModal" class="modal"><div class="box"><div class="mh"><h2>Nueva sucursal</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Nombre</label><input id="bName"></div><div><label>Encargado</label><input id="bManager"></div></div><div style="height:12px"></div><button id="saveBranch" class="btn red">Crear sucursal</button></div></div>
 
 <div id="toast" class="toast"></div>
@@ -262,20 +262,20 @@ applyTheme(localStorage.getItem(THEME_KEY)||'light');
 if($('themeToggle'))$('themeToggle').onclick=toggleTheme;
 if($('themeToggleLogin'))$('themeToggleLogin').onclick=toggleTheme;
 
-let S=JSON.parse(localStorage.getItem('viyediControlState‐v2')||'null')||{
-branches:[{name:'Cotoca',manager:'Por definir'},{name:'La Pampa',manager:'Mayra'},{name:'Mercado Retoño',manager:'Por definir'}],
-workers:[{name:'José Mamani',section:'Matador',branch:'Matadero',rate:'Bs 0,14 / pollo'},{name:'Mario Rodríguez',section:'Pelador',branch:'Matadero',rate:'Pendiente'}],
-users:[{name:'Victor',username:'victor28',branch:'Todas',perms:['Todo'],status:'Activo'}],
-clients:[{name:'Gladys Pérez',market:'La Pampa',phone:'+59170000001',balance:3200},{name:'Gabi Flores',market:'Cotoca',phone:'+59170000002',balance:7000}],
+let S=JSON.parse(localStorage.getItem('viyediControlState_clean_v1')||'null')||{
+branches:[],
+workers:[],
+users:[],
+clients:[],
 requests:[],payments:[],money:[],advances:[],discounts:[],
-dispatches:[{date:today(),time:'09:18',dest:'La Pampa',boxes:25,kg:548.3,price:19.5,status:'Entregado'},{date:today(),time:'08:41',dest:'Cotoca',boxes:18,kg:388.2,price:19.5,status:'Entregado'}],
+dispatches:[],
 liveEntries:[],activities:[],notifications:[]
 };
 S.clients=S.clients.map((c,i)=>({...c,phone:c.phone||('+5917000000'+(i+1))}));
 S.discounts=S.discounts||[];S.advances=S.advances||[];S.activities=S.activities||[];
 function workerRateText(section){if(section==='Pelador')return 'Bs 0,60 / pollo';if(section==='Matador')return 'Bs 0,14 / pollo';if(section==='Champador')return 'Bs 0,15 / pollo';if(section==='Limpieza')return 'Bs 100 / día';return 'Pendiente'}
 S.workers=S.workers.map(w=>({...w,rate:workerRateText(w.section)}));
-function persist(){localStorage.setItem('viyediControlState‐v2',JSON.stringify(S))}
+function persist(){localStorage.setItem('viyediControlState_clean_v1',JSON.stringify(S))}
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1800)}
 function stamp(){let d=new Date();return{date:today(),time:d.toLocaleTimeString('es-BO',{hour:'2-digit',minute:'2-digit'})}}
 function notify(title,text){S.notifications.unshift({title,text,time:'Ahora',unread:true});persist();renderNotif()}
@@ -310,7 +310,7 @@ $('saveWorker').onclick=()=>{let n=$('wName').value.trim(),s=$('wSection').value
 $('saveAdvance').onclick=()=>{let a=num($('aAmount').value);if(a<=0)return toast('Monto inválido');let d=stamp(),date=$('aDate').value||d.date;S.advances.unshift({worker:$('aWorker').value,amount:a,date,time:d.time,reason:$('aReason').value||'—',status:'Pendiente'});persist();$('advanceModal').classList.remove('show');render();renderWeek();toast('Adelanto registrado')};
 $('saveDiscount').onclick=()=>{let amount=num($('discountAmount').value),reason=$('discountReason').value.trim(),date=$('discountDate').value||today(),worker=$('discountWorker').value;if(amount<=0)return toast('Monto inválido');if(!reason)return toast('Escribí el motivo');S.discounts.unshift({worker,amount,date,reason,createdAt:new Date().toISOString()});persist();$('discountModal').classList.remove('show');$('discountAmount').value='';$('discountReason').value='';render();renderWeek();toast('Descuento vario guardado')};
 function openDiscountDetail(worker,dates){let items=periodDiscounts(worker,dates);$('discountDetailList').innerHTML=items.length?items.map(d=>`<div class="discount-item"><b>${money(d.amount)} · ${d.date}</b><span>${d.reason}</span></div>`).join(''):'<div class="muted">Sin descuentos varios en este periodo.</div>';$('discountDetailModal').classList.add('show')};
-$('saveRequest').onclick=()=>{let n=$('rName').value.trim();if(!n)return toast('Falta nombre');S.requests.unshift({name:n,market:$('rMarket').value,phone:$('rPhone').value.trim(),by:'Mayra',status:'Pendiente'});notify('Solicitud de cliente',`${n} espera aprobación.`);$('requestModal').classList.remove('show');render()};
+$('saveRequest').onclick=()=>{let n=$('rName').value.trim();if(!n)return toast('Falta nombre');S.requests.unshift({name:n,market:$('rMarket').value,phone:$('rPhone').value.trim(),by:'Sin identificar',status:'Pendiente'});notify('Solicitud de cliente',`${n} espera aprobación.`);$('requestModal').classList.remove('show');render()};
 function normalizePhone(v){return String(v||'').replace(/[^\d]/g,'')}
 function selectedPaymentClient(){return S.clients.find(x=>x.name===$('pClient').value)}
 function updatePaymentClient(){if(!$('pClient'))return;let c=selectedPaymentClient();if(!c)return;$('pPhone').value=c.phone||'Sin número';$('pDebt').value=money(c.balance||0);updatePaymentRemaining()}
