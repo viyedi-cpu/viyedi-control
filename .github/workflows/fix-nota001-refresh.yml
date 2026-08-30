@@ -1,0 +1,52 @@
+name: Fix NOTA 001 refresh
+
+on:
+  push:
+    branches:
+      - nota-001-pollo-produccion-planilla
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: nota-001-pollo-produccion-planilla
+      - name: Patch and validate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          t=p.read_text(encoding='utf-8')
+          old="function renderWeek(){if($('weeklyModal').classList.contains('show'))loadWeekGridDraft()}"
+          new="window.renderWeek=function(){if($('weeklyModal').classList.contains('show'))renderWeeklyMatrix()};"
+          if old not in t:
+              raise SystemExit('No se encontró el refresco semanal esperado')
+          t=t.replace(old,new,1)
+          p.write_text(t,encoding='utf-8')
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          t=Path('index.html').read_text(encoding='utf-8')
+          blocks=re.findall(r'<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>',t,re.S|re.I)
+          for i,b in enumerate(blocks): Path(f'/tmp/viyedi-{i}.js').write_text(b,encoding='utf-8')
+          assert 'window.renderWeek=function()' in t
+          assert 'renderWeeklyMatrix()' in t
+          PY
+          for f in /tmp/viyedi-*.js; do node --check "$f"; done
+          rm -f .github/workflows/fix-nota001-refresh.yml
+      - name: Commit fix
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github || true
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: preservar borrador semanal al refrescar"
+          git push origin HEAD:nota-001-pollo-produccion-planilla
