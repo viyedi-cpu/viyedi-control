@@ -191,3 +191,29 @@ Terminar de definir:
 3. Alcance por sucursal.
 4. Estados del usuario y recuperación de acceso.
 5. Qué acciones entran en auditoría.
+
+
+## 15. Prototipo implementado en la rama
+Fecha de actualización: 2026-09-20.
+
+Ya está visible en el código de la rama como prototipo para revisión:
+- Panel "Despachos" renombrado a "Logística".
+- Formulario de creación de usuario con:
+  - persona administrativa/directiva o trabajador existente;
+  - sugerencia automática de nombre de usuario;
+  - contraseña temporal generada;
+  - perfil/cargo;
+  - ámbito de sucursales;
+  - permisos por ramas.
+- Ficha de usuario con último ingreso, última actividad, estado, permisos y auditoría resumida.
+- Bloquear/activar usuario.
+- Generar nueva contraseña temporal.
+- Login local de prueba para usuarios creados en el mismo dispositivo.
+- Trabajadores separados en Tienda/Sucursal y Producción.
+- Producción sin cargo productivo fijo; actividades conocidas son solo informativas.
+- Adelantos con tipo, detalle/motivo, fecha, hora, usuario registrador y sucursal/lugar.
+- Calculadora del login inicia vacía.
+- Valores ficticios iniciales del resumen de Inicio fueron neutralizados.
+
+### Limitación deliberada del prototipo
+La autenticación y los datos de usuarios siguen siendo locales al navegador/dispositivo. La versión multi-dispositivo debe migrar a Supabase Auth y tablas reales antes de considerarse autenticación definitiva.
