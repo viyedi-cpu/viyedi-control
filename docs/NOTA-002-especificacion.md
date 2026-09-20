@@ -217,3 +217,23 @@ Ya está visible en el código de la rama como prototipo para revisión:
 
 ### Limitación deliberada del prototipo
 La autenticación y los datos de usuarios siguen siendo locales al navegador/dispositivo. La versión multi-dispositivo debe migrar a Supabase Auth y tablas reales antes de considerarse autenticación definitiva.
+
+
+## 16. Sucursales — estructura confirmada
+Actualización: 2026-09-20.
+
+La sucursal no tendrá un encargado fijo porque la persona que la atiende puede cambiar por cobertura, cierre temporal o necesidad operativa.
+
+Cada sucursal guarda:
+- Nombre de la sucursal.
+- Ubicación / dirección.
+- Referencia opcional.
+- Estado: Activa / Inactiva.
+- Fecha de creación interna.
+
+Reglas:
+- Los trabajadores se relacionan con la sucursal desde su propia ficha.
+- La cantidad de trabajadores mostrada en el panel de sucursal se calcula dinámicamente.
+- Una persona puede cambiar temporalmente de sucursal sin modificar la identidad de la sucursal.
+- Las sucursales inactivas conservan historial, pero no deben ofrecerse como destino operativo nuevo en selectores normales.
+- El panel de cada sucursal muestra su ubicación, estado, trabajadores asignados y movimientos/despachos de la fecha.
