@@ -219,7 +219,7 @@ body,.side,.top,.card,.act,.box,.notifs,.login-card,input,select,textarea{transi
 <div id="daySummaryWorkers"></div>
 </div></div>
 
-<div id="branchDetailModal" class="modal"><div class="box"><div class="mh"><h2 id="branchDetailTitle">Sucursal</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Fecha</label><input id="branchDate" type="date"></div></div><div style="height:12px"></div><div class="grid g4"><div class="card metric"><span>Cajas</span><b id="bdBoxes">0</b></div><div class="card metric o"><span>Kilos</span><b id="bdKg">0</b></div><div class="card metric y"><span>Precio esperado</span><b id="bdPrice">—</b></div><div class="card metric n"><span>Trabajadores</span><b id="bdWorkers">0</b></div></div><div style="height:12px"></div><div class="card"><h3>Despachos de la fecha</h3><table><thead><tr><th>Hora</th><th>Cajas</th><th>Kg</th><th>Precio</th></tr></thead><tbody id="bdTable"></tbody></table></div></div></div>
+<div id="branchDetailModal" class="modal"><div class="box"><div class="mh"><div><h2 id="branchDetailTitle">Sucursal</h2><div id="branchDetailMeta" class="muted"></div></div><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Fecha</label><input id="branchDate" type="date"></div></div><div style="height:12px"></div><div class="grid g4"><div class="card metric"><span>Cajas</span><b id="bdBoxes">0</b></div><div class="card metric o"><span>Kilos</span><b id="bdKg">0</b></div><div class="card metric y"><span>Precio esperado</span><b id="bdPrice">—</b></div><div class="card metric n"><span>Trabajadores asignados</span><b id="bdWorkers">0</b></div></div><div style="height:12px"></div><div class="card"><h3>Despachos de la fecha</h3><table><thead><tr><th>Hora</th><th>Cajas</th><th>Kg</th><th>Precio</th></tr></thead><tbody id="bdTable"></tbody></table></div></div></div>
 
 <div id="workerModal" class="modal"><div class="box" style="width:min(900px,100%)"><div class="mh"><div><h2>Crear trabajador</h2><div class="muted">Definí si pertenece a tienda/sucursal o a producción.</div></div><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Tipo de trabajador</label><select id="wType"><option>Tienda / Sucursal</option><option>Producción</option></select></div><div><label>Nombre completo</label><input id="wName"></div><div><label>CI (opcional)</label><input id="wCi"></div><div><label>Teléfono (opcional)</label><input id="wPhone"></div><div id="wBranchWrap"><label>Sucursal principal / base</label><select id="wBranch"></select></div><div><label>Fecha de ingreso</label><input id="wStart" type="date"></div><div><label>Estado</label><select id="wStatus"><option>Activo</option><option>Inactivo</option></select></div><div class="full" id="wSkillsWrap"><label>Actividades que sabe realizar (informativo, no limita la planilla)</label><div class="grid g3"><label><input class="wskill" type="checkbox" value="Pelador"> Pelar</label><label><input class="wskill" type="checkbox" value="Champador"> Champar</label><label><input class="wskill" type="checkbox" value="Matador"> Matar</label><label><input class="wskill" type="checkbox" value="Lava cajas"> Lavar cajas</label><label><input class="wskill" type="checkbox" value="Pintador"> Pintar</label><label><input class="wskill" type="checkbox" value="Ayudó a champar"> Ayudar a champar</label></div></div><div class="full"><label>Observaciones</label><textarea id="wNotes" rows="3"></textarea></div><input id="wSection" type="hidden" value="Tienda / Sucursal"></div><div style="height:12px"></div><button id="saveWorker" class="btn red">Guardar trabajador</button></div></div>
 
@@ -237,7 +237,12 @@ body,.side,.top,.card,.act,.box,.notifs,.login-card,input,select,textarea{transi
 <div style="height:12px"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="savePayment" class="btn yellow">Guardar cobro</button><button id="savePaymentWhatsapp" class="btn wa">Guardar y abrir WhatsApp</button></div>
 <div id="paymentSuccess" class="payment-success hidden"><b>Pago guardado correctamente.</b><div id="paymentSuccessText" class="muted" style="margin-top:4px"></div><div class="payment-actions"><button id="shareLastPayment" class="btn wa">Enviar saldo por WhatsApp</button></div></div></div></div>
 <div id="moneyModal" class="modal"><div class="box"><div class="mh"><h2>Registrar entrega / depósito</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Responsable</label><input id="mBy"></div><div><label>Monto</label><input id="mAmount"></div></div><div style="height:12px"></div><button id="saveMoney" class="btn yellow">Registrar</button></div></div>
-<div id="branchModal" class="modal"><div class="box"><div class="mh"><h2>Nueva sucursal</h2><button class="btn outline close">Cerrar</button></div><div class="form"><div><label>Nombre</label><input id="bName"></div><div><label>Encargado</label><input id="bManager"></div></div><div style="height:12px"></div><button id="saveBranch" class="btn red">Crear sucursal</button></div></div>
+<div id="branchModal" class="modal"><div class="box"><div class="mh"><div><h2>Nueva sucursal</h2><div class="muted">La sucursal es independiente de quién la atienda cada día.</div></div><button class="btn outline close">Cerrar</button></div><div class="form">
+<div><label>Nombre de la sucursal</label><input id="bName" placeholder="Ej. La Pampa"></div>
+<div><label>Ubicación / dirección</label><input id="bLocation" placeholder="Ej. Av. principal, zona..."></div>
+<div class="full"><label>Referencia (opcional)</label><input id="bReference" placeholder="Ej. Frente al mercado, al lado de..."></div>
+<div><label>Estado</label><select id="bStatus"><option>Activa</option><option>Inactiva</option></select></div>
+</div><div style="height:12px"></div><button id="saveBranch" class="btn red">Crear sucursal</button></div></div>
 
 <div id="userDetailModal" class="modal"><div class="box" style="width:min(980px,100%)"><div class="mh"><div><h2 id="udTitle">Usuario</h2><div id="udSubtitle" class="muted"></div></div><button class="btn outline close">Cerrar</button></div><div class="grid g3"><div class="card metric"><span>Último ingreso</span><b id="udLastLogin" style="font-size:17px">—</b></div><div class="card metric o"><span>Última actividad</span><b id="udLastActivity" style="font-size:17px">—</b></div><div class="card metric n"><span>Estado</span><b id="udStatus" style="font-size:17px">—</b></div></div><div style="height:14px"></div><div class="grid g2"><div class="card"><h3>Acceso</h3><div id="udAccess"></div><div style="height:10px"></div><button id="udToggleStatus" class="btn outline">Bloquear / Activar</button><button id="udResetPass" class="btn yellow" style="margin-left:6px">Nueva contraseña temporal</button><div id="udTempPass" class="notice hidden" style="margin-top:10px"></div></div><div class="card"><h3>Actividad importante</h3><div id="udAudit" class="discount-list"></div></div></div><div style="height:14px"></div><div class="card"><h3>Permisos asignados</h3><div id="udPerms" class="perm-tree"></div><div style="height:10px"></div><button id="udSavePerms" class="btn red">Guardar permisos</button></div></div></div><div id="toast" class="toast"></div>
 
@@ -723,6 +728,8 @@ const qsa=s=>[...document.querySelectorAll(s)];
 S.audit=S.audit||[];
 S.users=S.users||[];
 S.workers=S.workers||[];
+S.branches=S.branches||[];
+S.branches=S.branches.map((b,i)=>({...b,id:b.id||('br-'+i+'-'+String(b.name||'').toLowerCase().replace(/\\s+/g,'-')),location:b.location||'',reference:b.reference||'',status:b.status||'Activa'}));
 S.workers=S.workers.map((w,i)=>({...w,id:w.id||('wrk-'+i+'-'+String(w.name||'').toLowerCase().replace(/\s+/g,'-')),status:w.status||'Activo',phone:w.phone||'',ci:w.ci||'',skills:w.skills||[],notes:w.notes||'',startDate:w.startDate||''}));
 S.users=S.users.map((u,i)=>({...u,id:u.id||('usr-'+i+'-'+String(u.username||'').toLowerCase()),profile:u.profile||'Sin definir',scope:u.scope||'one',branches:u.branches||((u.branch&&u.branch!=='Todas')?[u.branch]:[]),lastLogin:u.lastLogin||'',lastActivity:u.lastActivity||''}));
 S.audit=S.audit.filter(a=>!a.at||Date.now()-new Date(a.at).getTime()<=90*24*60*60*1000);
@@ -760,7 +767,7 @@ function usernameSuggestion(name){
   let n=1,candidate='';do{candidate=base+String(n).padStart(2,'0');n++}while(used.includes(candidate));
   return candidate;
 }
-function branchesAll(){return ['Matadero',...S.branches.map(b=>b.name)]}
+function branchesAll(){return ['Matadero',...S.branches.filter(b=>(b.status||'Activa')==='Activa').map(b=>b.name)]}
 function fill002(){
   if($('uWorker'))$('uWorker').innerHTML=S.workers.map(w=>'<option value="'+esc(w.id)+'">'+esc(w.name)+' · '+esc(w.section)+'</option>').join('');
   if($('aBranch'))$('aBranch').innerHTML=branchesAll().map(b=>'<option>'+esc(b)+'</option>').join('');
@@ -890,8 +897,45 @@ $('saveAdvance').onclick=()=>{
 
 const baseRender=render;
 render=function(){
-  baseRender();fill002();renderUsers002();renderWorkers();
+  baseRender();fill002();renderUsers002();renderWorkers();renderBranches002();
   $('advanceBody').innerHTML=S.advances.map(a=>'<tr><td><b>'+esc(a.worker)+'</b></td><td>'+money(a.amount)+'</td><td>'+esc(a.date)+' '+esc(a.time||'')+'</td><td>'+esc(a.type||'—')+'</td><td>'+esc(a.reason||'—')+'<br><span class="muted">'+esc(a.branch||'')+'</span></td><td>'+esc(a.by||'—')+'</td><td><span class="badge '+(a.status==='Pendiente'?'wait':'ok')+'">'+esc(a.status||'Pendiente')+'</span></td></tr>').join('')||'<tr><td colspan="7" class="muted">Sin adelantos registrados.</td></tr>';
+};
+
+
+function activeBranches(){return S.branches.filter(b=>(b.status||'Activa')==='Activa')}
+function branchByName(name){return S.branches.find(b=>b.name===name)}
+function renderBranches002(){
+  $('branchGrid').innerHTML=S.branches.map(b=>{
+    let ds=S.dispatches.filter(d=>d.dest===b.name&&d.date===today()),ws=S.workers.filter(w=>w.branch===b.name&&w.status!=='Inactivo').length;
+    let loc=b.location||'Ubicación pendiente',ref=b.reference?'<br><span class="muted">'+esc(b.reference)+'</span>':'';
+    return '<div class="card branch-card" data-branch="'+esc(b.name)+'"><div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><h3 style="margin:0">'+esc(b.name)+'</h3><span class="badge '+((b.status||'Activa')==='Activa'?'ok':'off')+'">'+esc(b.status||'Activa')+'</span></div><div class="muted" style="margin-top:7px">📍 '+esc(loc)+ref+'</div><p><b>'+ws+'</b> trabajadores · <b>'+ds.reduce((a,d)=>a+d.boxes,0)+'</b> cajas · <b>'+fmt(ds.reduce((a,d)=>a+d.kg,0))+'</b> kg hoy</p></div>'
+  }).join('')||'<div class="card"><span class="muted">Todavía no hay sucursales creadas.</span></div>';
+  qsa('.branch-card').forEach(x=>x.onclick=()=>openBranch(x.dataset.branch));
+}
+$('saveBranch').onclick=()=>{
+  let name=$('bName').value.trim(),location=$('bLocation').value.trim(),reference=$('bReference').value.trim(),status=$('bStatus').value;
+  if(!name)return toast('Falta nombre de la sucursal');
+  if(!location)return toast('Falta ubicación / dirección');
+  if(S.branches.some(b=>String(b.name).toLowerCase()===name.toLowerCase()))return toast('Ya existe una sucursal con ese nombre');
+  S.branches.push({id:'br-'+Date.now(),name,location,reference,status,createdAt:nowISO()});
+  persist();audit('Sucursal creada',name+' · '+location);
+  $('branchModal').classList.remove('show');$('bName').value='';$('bLocation').value='';$('bReference').value='';$('bStatus').value='Activa';
+  render();toast('Sucursal creada');
+};
+qsa('[data-open="branchModal"]').forEach(b=>b.addEventListener('click',()=>{
+  $('bName').value='';$('bLocation').value='';$('bReference').value='';$('bStatus').value='Activa';
+}));
+openBranch=function(name){
+  activeBranch=name;let b=branchByName(name);
+  $('branchDetailTitle').textContent=name;
+  $('branchDetailMeta').innerHTML=b?('📍 '+esc(b.location||'Ubicación pendiente')+(b.reference?' · '+esc(b.reference):'')+' · <span class="badge '+((b.status||'Activa')==='Activa'?'ok':'off')+'">'+esc(b.status||'Activa')+'</span>'):'';
+  $('branchDate').value=today();$('branchDetailModal').classList.add('show');renderBranchDetail()
+};
+const baseRenderBranchDetail=renderBranchDetail;
+renderBranchDetail=function(){
+  baseRenderBranchDetail();
+  let b=branchByName(activeBranch);
+  if($('branchDetailMeta'))$('branchDetailMeta').innerHTML=b?('📍 '+esc(b.location||'Ubicación pendiente')+(b.reference?' · '+esc(b.reference):'')+' · <span class="badge '+((b.status||'Activa')==='Activa'?'ok':'off')+'">'+esc(b.status||'Activa')+'</span>'):'';
 };
 
 function accessPrefix(page){return {users:'users.',dispatch:'logistics.',production:'production.',commercial:'commercial.',branches:'branches.',workers:'workers.',reports:'reports.'}[page]||''}
