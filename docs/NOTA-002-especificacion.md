@@ -237,3 +237,19 @@ Reglas:
 - Una persona puede cambiar temporalmente de sucursal sin modificar la identidad de la sucursal.
 - Las sucursales inactivas conservan historial, pero no deben ofrecerse como destino operativo nuevo en selectores normales.
 - El panel de cada sucursal muestra su ubicación, estado, trabajadores asignados y movimientos/despachos de la fecha.
+
+
+## 17. Jornadas editables y foto de usuario
+Cambios confirmados e implementados en la rama de prueba:
+- Jornadas laborales tiene acceso propio y visible dentro de Producción, separado de Semana de pago.
+- Semana de pago tiene su propio acceso directo.
+- Las jornadas guardadas se pueden corregir después.
+- Se puede cambiar fecha, trabajador, actividad, cantidad y observación.
+- Se puede eliminar una jornada registrada por error.
+- Las correcciones modifican el mismo registro operativo que alimenta la semana de pago.
+- Crear usuario permite foto opcional.
+- La foto puede tomarse con la cámara del dispositivo o elegirse desde archivos/galería.
+- La imagen se comprime antes de guardarse para reducir consumo de almacenamiento.
+- La foto aparece en el listado y ficha del usuario.
+
+Limitación actual: las fotos siguen almacenadas localmente en el navegador junto con el prototipo. Al migrar usuarios a Supabase, las imágenes deberán pasar a Supabase Storage para sincronización multi-dispositivo.
