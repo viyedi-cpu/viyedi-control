@@ -17,7 +17,7 @@ const types=['Pelador','Matador','Champador','Pintador','Ayudante','Ayudó a cha
 const known=()=>typeof S!=='undefined'&&Array.isArray(S.workers)?S.workers.filter(w=>w.type==='Producción'||w.area==='Producción'||w.branch==='Matadero'||['Pelador','Matador','Champador','Pintador','Ayudante','Limpieza','Lava cajas'].includes(w.section)).map(w=>w.name).filter(Boolean):[];
 let image=null,filename='',rows=[],seen=new Set(),semanticSeen=new Set(),personIndex=-1;
 const total=f=>f.tandas.length&&f.tandas.every(n=>Number.isSafeInteger(n)&&n>=0)?f.tandas.reduce((a,n)=>a+n,0):null;
-const state=f=>!f.nombre||f.actividad==='Desconocida'||total(f)===null||(f.total_escrito!==null&&f.total_escrito!==total(f))?'⚠ Revisar cantidad / actividad':f.tipoPersona==='eventual'?'Eventual (solo esta jornada)':f.tipoPersona==='alta_pendiente'?'⚠ Pendiente de alta':!f.worker?'⚠ Identificar trabajador':'✓ Revisar';
+const state=f=>{const d=!f.nombre||f.actividad==='Desconocida'||total(f)===null||(f.total_escrito!==null&&f.total_escrito!==total(f));const identidad=f.tipoPersona==='eventual'?'Eventual (solo esta jornada)':f.tipoPersona==='alta_pendiente'?'Pendiente de alta':f.worker?'Identificado':'Pendiente de identificar';return identidad+(d?' · ⚠ Revisar cantidades/actividad':'');};
 function abrirDesconocido(i){
  if(!rows[i]||!rows[i].nombre||rows[i].worker)return;
  personIndex=i;document.getElementById('pizNamePrompt').textContent='Se leyó «'+rows[i].nombre+'». ¿Deseás agregarlo a la lista de trabajadores?';unknown.classList.add('show');
@@ -48,7 +48,7 @@ function render(){
    const k=input.dataset.k,v=input.value;
    if(k==='tandas')f.tandas=v.trim()?v.split(',').map(s=>/^\d+$/.test(s.trim())?Number(s):null):[];
    else if(k==='total_escrito')f[k]=v.trim()===''?null:Number(v);
-   else {f[k]=v;if(k==='worker'&&v)f.tipoPersona='';if(k==='nombre'&&v!==f.nombre)f.tipoPersona='';}
+   else {const anterior=f[k];f[k]=v;if(k==='worker'&&v)f.tipoPersona='';if(k==='nombre'&&v!==anterior)f.tipoPersona='';}
    render();
   }));
   d.querySelector('[data-remove]').onclick=()=>{rows.splice(i,1);render();};
@@ -100,7 +100,7 @@ $('pizExample').onclick=()=>{
 $('pizAdd').onclick=()=>add();
 $('pizExport').onclick=()=>{
  if(!rows.length){notify('No hay filas para exportar.');return;}
- const payload={estado:'BORRADOR_SIN_GUARDAR',fecha:$('pizDate').value,archivo:filename,filas:rows.map(x=>({...x,total_calculado:total(x),pendiente:state(x)!=='✓ Revisar',tipoPersona:x.tipoPersona||''})),nota:'Comparación con boletas solo preliminar: no determina faltantes ni autoriza descuentos'};
+ const payload={estado:'BORRADOR_SIN_GUARDAR',fecha:$('pizDate').value,archivo:filename,filas:rows.map(x=>({...x,total_calculado:total(x),pendiente:!x.worker||x.tipoPersona==='alta_pendiente'||x.actividad==='Desconocida'||total(x)===null||(x.total_escrito!==null&&x.total_escrito!==total(x)),tipoPersona:x.tipoPersona||''})),nota:'Comparación con boletas solo preliminar: no determina faltantes ni autoriza descuentos'};
  const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'})),a=document.createElement('a');
  a.href=url;a.download='borrador_viyedi_pizarra.json';a.click();URL.revokeObjectURL(url);notify('Descargado el borrador; la planilla real no cambió.');
 };
