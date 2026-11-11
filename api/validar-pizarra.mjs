@@ -16,3 +16,14 @@ export function normalizarPizarra(raw){
  });
  return {tipo,fecha_texto:typeof raw?.fecha_texto==='string'?raw.fecha_texto.slice(0,70):'',filas,advertencias};
 }
+
+export function evaluarCuadre({recibidos,pelados,saldoInicial=null,bajas=null,saldoFinal=null}){
+ const valido=n=>Number.isSafeInteger(n)&&n>=0;
+ if(!valido(recibidos)||!valido(pelados))return {estado:'pendiente',condicion:'preliminar',diferencia:null,esperado:null};
+ const conciliado=[saldoInicial,bajas,saldoFinal].every(valido);
+ const esperado=conciliado?recibidos+saldoInicial-bajas-saldoFinal:recibidos;
+ const diferencia=esperado-pelados;
+ const magnitud=Math.abs(diferencia);
+ const estado=magnitud>=10?'urgente':magnitud>0?'observacion':'coincide';
+ return {estado,condicion:conciliado?'conciliado':'preliminar',diferencia,esperado};
+}
