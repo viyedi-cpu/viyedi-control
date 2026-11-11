@@ -48,7 +48,7 @@ function render(){
    const k=input.dataset.k,v=input.value;
    if(k==='tandas')f.tandas=v.trim()?v.split(',').map(s=>/^\d+$/.test(s.trim())?Number(s):null):[];
    else if(k==='total_escrito')f[k]=v.trim()===''?null:Number(v);
-   else {const anterior=f[k];f[k]=v;if(k==='worker'&&v)f.tipoPersona='';if(k==='nombre'&&v!==anterior)f.tipoPersona='';}
+   else {const anterior=f[k];f[k]=v;if(k==='worker'&&v)f.tipoPersona='';if(k==='nombre'&&v!==anterior){f.tipoPersona='';f.worker='';}}
    render();
   }));
   d.querySelector('[data-remove]').onclick=()=>{rows.splice(i,1);render();};
