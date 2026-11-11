@@ -32,3 +32,10 @@ Despliegue público ni acceso real a API (requiere credenciales y servidor), gua
 
 ## Aceptación
 Una imagen bancaria no produce registros; los nombres dudosos no se asignan; las sumas se verifican; se pueden corregir filas; nada modifica la planilla real.
+
+## Ampliaciones solicitadas — 2026-11-11
+- Si un nombre no coincide con el padrón, mostrar decisión Sí/No: Sí inicia alta regular (solo tras completar ficha y confirmar); No crea una identidad eventual asociada a la fecha y actividades, sin incluirla automáticamente en plantilla permanente. Reutilizar identidad si regresa, y permitir convertirla sin duplicar historial.
+- Foto idéntica: comparación SHA-256 del archivo contra registros de importaciones. Mismo contenido con otra foto: comparación semántica de fecha, trabajador, actividad y tandas. Ante coincidencia, sugerir revisar/actualizar un registro existente, nunca duplicar automáticamente. En spike esto se limitará a alerta de sesión; producción necesita persistencia transaccional.
+- Comparación preliminar: sumar todas las boletas de pollo vivo de la fecha y comparar con pelado declarado. Diferencia absoluta 0 = coincide, 1..9 = observación roja pequeña, >=10 = revisión urgente. Detectar también exceso de pelado sobre recibidos. La alerta no implica por sí sola faltante, culpa, ni descuento.
+- Conciliación definitiva necesita saldo inicial, bajas, saldo final, registros de otros días y fechas de sacrificio; si se desconocen estos movimientos, mostrar siempre "preliminar" y no presentar diferencias como faltantes definitivos. Imagen dudosa o campos sin registrar: no marcar como conciliada.
+- No sustituir botón de guardado de pizarra real: estos cambios se prueban en spike con borradores, sin guardar en S.activities.
