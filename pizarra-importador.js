@@ -100,7 +100,7 @@ $('pizExample').onclick=()=>{
 $('pizAdd').onclick=()=>add();
 $('pizExport').onclick=()=>{
  if(!rows.length){notify('No hay filas para exportar.');return;}
- const payload={estado:'BORRADOR_SIN_GUARDAR',fecha:$('pizDate').value,archivo:filename,filas:rows.map(x=>({...x,total_calculado:total(x),pendiente:!x.worker||x.tipoPersona==='alta_pendiente'||x.actividad==='Desconocida'||total(x)===null||(x.total_escrito!==null&&x.total_escrito!==total(x)),tipoPersona:x.tipoPersona||''})),nota:'Comparación con boletas solo preliminar: no determina faltantes ni autoriza descuentos'};
+ const payload={estado:'BORRADOR_SIN_GUARDAR',fecha:$('pizDate').value,archivo:filename,filas:rows.map(x=>({...x,total_calculado:total(x),pendiente:(!x.worker&&x.tipoPersona!=='eventual')||x.tipoPersona==='alta_pendiente'||x.actividad==='Desconocida'||total(x)===null||(x.total_escrito!==null&&x.total_escrito!==total(x)),tipoPersona:x.tipoPersona||''})),nota:'Comparación con boletas solo preliminar: no determina faltantes ni autoriza descuentos'};
  const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'})),a=document.createElement('a');
  a.href=url;a.download='borrador_viyedi_pizarra.json';a.click();URL.revokeObjectURL(url);notify('Descargado el borrador; la planilla real no cambió.');
 };
