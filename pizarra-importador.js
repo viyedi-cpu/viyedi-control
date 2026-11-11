@@ -12,7 +12,7 @@ document.body.append(m);
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
 const types=['Pelador','Matador','Champador','Pintador','Ayudante','Ayudó a champar','Lava cajas','Limpieza general','Desconocida'];
-const known=()=>typeof S!=='undefined'&&Array.isArray(S.workers)?S.workers.map(w=>w.name).filter(Boolean):[];
+const known=()=>typeof S!=='undefined'&&Array.isArray(S.workers)?S.workers.filter(w=>w.type==='Producción'||w.area==='Producción'||w.branch==='Matadero'||['Pelador','Matador','Champador','Pintador','Ayudante','Limpieza','Lava cajas'].includes(w.section)).map(w=>w.name).filter(Boolean):[];
 let image=null,filename='',rows=[],seen=new Set();
 const total=f=>f.tandas.length&&f.tandas.every(n=>Number.isSafeInteger(n)&&n>=0)?f.tandas.reduce((a,n)=>a+n,0):null;
 const state=f=>!f.nombre||f.actividad==='Desconocida'||total(f)===null||(f.total_escrito!==null&&f.total_escrito!==total(f))?'⚠ Revisar cantidad / actividad':!f.worker?'⚠ Vincular trabajador':'✓ Revisar';
@@ -44,13 +44,13 @@ function notify(t){$('pizStatus').textContent=t;}
 b.onclick=()=>m.classList.add('show');
 $('pizClose').onclick=()=>m.classList.remove('show');
 m.onclick=e=>{if(e.target===m)m.classList.remove('show');};
-$('pizDate').value=new Date().toLocaleDateString('en-CA',{timeZone:'America/La_Paz'});
+$('pizDate').value=new Intl.DateTimeFormat('sv-SE',{timeZone:'America/La_Paz',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 $('pizFile').onchange=async()=>{
  const f=$('pizFile').files[0];if(!f)return;
  if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>5*1024*1024){notify('Imagen inválida o mayor a 5 MB');return;}
  image=await new Promise((ok,no)=>{const reader=new FileReader();reader.onload=()=>ok(reader.result);reader.onerror=no;reader.readAsDataURL(f);});
  filename=f.name;$('pizPreview').src=image;$('pizPreview').classList.remove('hidden');
- if(crypto?.subtle){const digest=await crypto.subtle.digest('SHA-256',await f.arrayBuffer());const hash=Array.from(new Uint8Array(digest)).map(v=>v.toString(16).padStart(2,'0')).join('');
+ if(window.crypto?.subtle){const digest=await crypto.subtle.digest('SHA-256',await f.arrayBuffer());const hash=Array.from(new Uint8Array(digest)).map(v=>v.toString(16).padStart(2,'0')).join('');
   if(seen.has(hash))notify('Posible duplicado: esta imagen ya fue seleccionada en esta sesión.');else {seen.add(hash);notify('Fotografía lista. Revisá la fecha.');}}
  else notify('Fotografía lista. No fue posible comprobar duplicados.');
 };
